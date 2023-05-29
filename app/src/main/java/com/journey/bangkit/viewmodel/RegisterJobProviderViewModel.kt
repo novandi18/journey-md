@@ -6,14 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.journey.bangkit.data.model.City
 import com.journey.bangkit.data.model.Province
 import com.journey.bangkit.data.model.Sector
-import com.journey.bangkit.repository.JobProviderRepository
+import com.journey.bangkit.repository.RegisterJobProviderRepository
 import com.journey.bangkit.ui.common.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class RegisterJobProviderViewModel(private val repository: JobProviderRepository) : ViewModel() {
+class RegisterJobProviderViewModel(private val repository: RegisterJobProviderRepository) : ViewModel() {
     private val _region: MutableStateFlow<UiState<Triple<List<Province>, List<City>, List<Sector>>>> = MutableStateFlow(UiState.Loading)
     val region: StateFlow<UiState<Triple<List<Province>, List<City>, List<Sector>>>> get() = _region
 

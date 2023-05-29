@@ -5,15 +5,15 @@ import com.journey.bangkit.data.source.DisabilityDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-class JobSeekerRepository {
+class RegisterJobSeekerRepository {
     fun getDisabilityData(): Flow<List<Disability>> = flowOf(DisabilityDataSource.disabilities)
 
     companion object {
         @Volatile
-        private var instance: JobSeekerRepository? = null
+        private var instance: RegisterJobSeekerRepository? = null
 
-        fun getInstance(): JobSeekerRepository = instance ?: synchronized(this) {
-            JobSeekerRepository().apply {
+        fun getInstance(): RegisterJobSeekerRepository = instance ?: synchronized(this) {
+            RegisterJobSeekerRepository().apply {
                 instance = this
             }
         }

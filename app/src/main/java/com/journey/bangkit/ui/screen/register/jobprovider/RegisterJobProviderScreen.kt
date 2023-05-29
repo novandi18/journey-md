@@ -113,7 +113,7 @@ fun RegisterJobProviderContent(
 
 @Preview(showBackground = true)
 @Composable
-fun RegisterJobProviderPreview() {
+private fun RegisterJobProviderPreview() {
     JourneyTheme {
         RegisterJobProviderContent(
             backToLogin = {},

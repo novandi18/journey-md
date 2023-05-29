@@ -15,13 +15,13 @@ import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.journey.bangkit.ui.common.ViewModelFactory
 import com.journey.bangkit.ui.component.onboarding.OnBoardingContent
+import com.journey.bangkit.ui.theme.Dark
 import com.journey.bangkit.viewmodel.OnBoardingViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -55,7 +56,7 @@ fun OnBoardingScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color.White)
     ) {
         HorizontalPager(pageCount = data.size, state = pagerState) { pageIndex ->
             OnBoardingContent(
@@ -81,7 +82,7 @@ fun OnBoardingScreen(
             ) {
                 Text(
                     text = stringResource(id = R.string.skip_onboarding),
-                    color = MaterialTheme.colorScheme.onPrimary.copy(0.6f),
+                    color = Dark.copy(0.6f),
                     fontSize = 16.sp
                 )
             }
@@ -121,7 +122,7 @@ fun OnBoardingScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun OnBoardingPreview() {
+private fun OnBoardingPreview() {
     JourneyTheme {
         OnBoardingScreen(
             navigateToStarted = {}

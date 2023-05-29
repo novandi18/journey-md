@@ -70,7 +70,7 @@ fun StartedScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun StartedPreview() {
+private fun StartedPreview() {
     JourneyTheme {
         StartedScreen(
             navigateToJobSeeker = {},
