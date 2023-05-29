@@ -75,7 +75,9 @@ fun RegisterJobSeekerContent(
     disability: List<Disability>,
     isLoading: Boolean = false
 ) {
-    Column {
+    Column(
+        modifier = modifier.background(color = Color.White)
+    ) {
         AuthHeader(back = backToLogin, title = stringResource(id = R.string.jobseeker))
         if (isLoading) {
             LinearProgressIndicator(
@@ -118,7 +120,7 @@ fun RegisterJobSeekerContent(
 
 @Preview(showBackground = true)
 @Composable
-fun RegisterJobSeekerPreview() {
+private fun RegisterJobSeekerPreview() {
     JourneyTheme {
         RegisterJobSeekerContent(
             backToLogin = {},

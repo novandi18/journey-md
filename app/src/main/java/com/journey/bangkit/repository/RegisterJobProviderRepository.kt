@@ -10,7 +10,7 @@ import com.journey.bangkit.utils.getSector
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-class JobProviderRepository {
+class RegisterJobProviderRepository {
     fun getProvinceCitySector(context: Context, provinceId: Int)
     : Flow<Triple<List<Province>,List<City>, List<Sector>>> {
         val province = getProvince(context)
@@ -21,10 +21,10 @@ class JobProviderRepository {
 
     companion object {
         @Volatile
-        private var instance: JobProviderRepository? = null
+        private var instance: RegisterJobProviderRepository? = null
 
-        fun getInstance(): JobProviderRepository = instance ?: synchronized(this) {
-            JobProviderRepository().apply {
+        fun getInstance(): RegisterJobProviderRepository = instance ?: synchronized(this) {
+            RegisterJobProviderRepository().apply {
                 instance = this
             }
         }

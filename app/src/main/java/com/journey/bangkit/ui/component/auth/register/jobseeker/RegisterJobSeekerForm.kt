@@ -11,6 +11,10 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Person3
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,6 +32,7 @@ fun RegisterJobSeekerForm(
     modifier: Modifier = Modifier,
     disabilityData: List<Disability>
 ) {
+    var disabilitySelected by rememberSaveable { mutableStateOf(0) }
     val provinces = disabilityData.map { it.name }
 
     Column(
@@ -73,7 +78,10 @@ fun RegisterJobSeekerForm(
             icon = Icons.Filled.AssistWalker,
             label = stringResource(id = R.string.disability_placeholder),
             data = provinces,
-            setItemSelected = {}
+            itemSelected = disabilitySelected,
+            setItemSelected = {
+                disabilitySelected = it
+            }
         )
         JPasswordField()
     }

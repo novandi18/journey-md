@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.journey.bangkit.data.model.OnBoarding
 import com.journey.bangkit.ui.theme.Blue40
+import com.journey.bangkit.ui.theme.Dark
 
 @Composable
 fun OnBoardingContent(
@@ -60,7 +60,7 @@ fun OnBoardingContent(
                     text = stringResource(id = data[pageIndex].description),
                     textAlign = TextAlign.Center,
                     fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
+                    color = Dark.copy(alpha = 0.8f)
                 )
             }
         }

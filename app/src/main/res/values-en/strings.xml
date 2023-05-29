@@ -51,4 +51,7 @@
     <string name="sector_placeholder">Choose corporate sector</string>
     <string name="total_employee">Total Employees</string>
     <string name="totalemployee_placeholder">Enter total employees</string>
+    <string name="job_apply">Job Apply</string>
+    <string name="job_vacancy">Your Vacancy</string>
+    <string name="job_vacancy_user">Applicant</string>
 </resources>
