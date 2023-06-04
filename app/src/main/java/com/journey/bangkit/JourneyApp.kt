@@ -7,10 +7,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -36,6 +38,8 @@ fun JourneyApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberAnimatedNavController()
 ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
     val dataStore = JourneyDataStore(LocalContext.current)
     val isOnBoardingCompleted = dataStore.isOnBoardingCompleted.collectAsState(initial = false)
     val isLoginAsJobSeeker = dataStore.isLoginAsJobSeeker.collectAsState(initial = false)
@@ -45,22 +49,15 @@ fun JourneyApp(
         bottomBar = {
             BottomBar(
                 navController = navController,
-                isJobSeeker = isLoginAsJobSeeker.value
+                isJobSeeker = isLoginAsJobSeeker.value,
+                currentRoute = currentRoute
             )
         }
     ) { innerPadding ->
         AnimatedNavHost(
             navController = navController,
             modifier = modifier.padding(innerPadding),
-            startDestination = if (isOnBoardingCompleted.value) {
-                if (isLoginAsJobSeeker.value) {
-                    Screen.HomeJobSeeker.route
-                } else if (isLoginAsJobProvider.value) {
-                    Screen.HomeJobProvider.route
-                } else Screen.Started.route
-            } else {
-                Screen.OnBoarding.route
-            }
+            startDestination = Screen.HomeJobSeeker.route
         ) {
             composable(Screen.OnBoarding.route,
                 enterTransition = {
@@ -178,6 +175,8 @@ fun JourneyApp(
                     when (initialState.destination.route) {
                         Screen.JobApply.route ->
                             slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+                        Screen.ProfileJobSeeker.route ->
+                            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
                         else -> null
                     }
                 }
@@ -199,6 +198,8 @@ fun JourneyApp(
                 enterTransition = {
                     when (initialState.destination.route) {
                         Screen.JobApply.route ->
+                            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+                        Screen.HomeJobSeeker.route ->
                             slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
                         else -> null
                     }

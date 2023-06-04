@@ -26,6 +26,7 @@
     <string name="companyname_placeholder">Enter company name</string>
     <string name="city_placeholder">Choose city</string>
     <string name="loading">Loading…</string>
+    <string name="search_placeholder">Search job</string>
     <string name="vacancy">Vacancy</string>
     <string name="jobseeker">Job Seeker</string>
     <string name="jobprovider">Job Provider</string>
@@ -54,4 +55,10 @@
     <string name="job_apply">Job Apply</string>
     <string name="job_vacancy">Your Vacancy</string>
     <string name="job_vacancy_user">Applicant</string>
+    <string name="search">Search</string>
+    <string name="cancel">Cancel</string>
+    <string name="your_skills">Your Skills</string>
+    <string name="profile_photo">Profile Photo</string>
+    <string name="photo">Photo</string>
+    <string name="logout">Account Logout</string>
 </resources>

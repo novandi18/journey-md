@@ -57,6 +57,10 @@
     <string name="sector_placeholder">Pilih sektor perusahaan</string>
     <string name="totalemployee_placeholder">Masukan jumlah karyawan</string>
     <string name="loading">Memuat…</string>
+    <string name="search_placeholder">Cari pekerjaan</string>
+    <string name="your_skills">Skill Anda</string>
+    <string name="profile_photo">Foto Profil</string>
+    <string name="photo">Foto</string>
 
     <!--  Title  -->
     <string name="vacancy">Lowongan</string>
@@ -64,7 +68,12 @@
     <string name="jobprovider">Rekruiter</string>
     <string name="profile">Profil</string>
     <string name="settings">Pengaturan</string>
-    <string name="job_apply">Lamaran</string>
+    <string name="job_apply">Lamaran Kerja</string>
     <string name="job_vacancy">Lowongan Anda</string>
     <string name="job_vacancy_user">Pelamar Kerja</string>
+
+    <!--  Button  -->
+    <string name="search">Cari</string>
+    <string name="cancel">Batal</string>
+    <string name="logout">Keluar Akun</string>
 </resources>

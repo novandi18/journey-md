@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material.icons.filled.WorkHistory
 import com.journey.bangkit.R
+import com.journey.bangkit.data.model.User
 import com.journey.bangkit.ui.navigation.NavigationItem
 import com.journey.bangkit.ui.navigation.Screen
 
@@ -50,5 +51,20 @@ object JourneyDataSource {
             screen = Screen.ProfileJobProvider,
             contentDescription = R.string.profile
         ),
+    )
+
+    val navigationCategory = listOf("Rekomendasi untuk anda", "Terpopuler", "Terbaru")
+    val user = User(
+        id = "sdfsjkdhfksjv",
+        full_name = "Novandi Ramadhan",
+        email = "novandi@journey.com",
+        address = "Kaujon Kidul, Serang, Banten",
+        profile_photo_url = "https://storage.googleapis.com/journey-bangkit/profile.png",
+        gender = "Male",
+        age = "21",
+        phone_number = "085156066785",
+        disability_name = "Blind",
+        skill_one_name = "Web Development",
+        skill_two_name = "Vector Illustration"
     )
 }

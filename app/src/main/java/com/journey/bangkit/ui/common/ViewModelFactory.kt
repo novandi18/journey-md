@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.journey.bangkit.di.Injection
 import com.journey.bangkit.viewmodel.HomeJobSeekerViewModel
+import com.journey.bangkit.viewmodel.JobApplyViewModel
 import com.journey.bangkit.viewmodel.LoginJobProviderViewModel
 import com.journey.bangkit.viewmodel.LoginJobSeekerViewModel
 import com.journey.bangkit.viewmodel.OnBoardingViewModel
+import com.journey.bangkit.viewmodel.ProfileJobSeekerViewModel
 import com.journey.bangkit.viewmodel.RegisterJobProviderViewModel
 import com.journey.bangkit.viewmodel.RegisterJobSeekerViewModel
 
@@ -25,6 +27,10 @@ class ViewModelFactory : ViewModelProvider.NewInstanceFactory() {
             return LoginJobSeekerViewModel(Injection.provideLoginJobSeeker()) as T
         } else if (modelClass.isAssignableFrom(LoginJobProviderViewModel::class.java)) {
             return LoginJobProviderViewModel(Injection.provideLoginJobProvider()) as T
+        } else if (modelClass.isAssignableFrom(JobApplyViewModel::class.java)) {
+            return JobApplyViewModel(Injection.provideJobApply()) as T
+        } else if (modelClass.isAssignableFrom(ProfileJobSeekerViewModel::class.java)) {
+            return ProfileJobSeekerViewModel(Injection.provideProfileJobSeeker()) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
