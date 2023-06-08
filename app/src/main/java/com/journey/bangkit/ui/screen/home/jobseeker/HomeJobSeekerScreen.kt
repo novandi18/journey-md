@@ -2,6 +2,7 @@ package com.journey.bangkit.ui.screen.home.jobseeker
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.journey.bangkit.data.source.JourneyDataSource
@@ -38,7 +40,7 @@ import com.journey.bangkit.ui.theme.Blue40
 import com.journey.bangkit.ui.theme.JourneyTheme
 import com.journey.bangkit.viewmodel.HomeJobSeekerViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.journey.bangkit.data.model.Vacancy
+import com.journey.bangkit.data.model.VacancyResponse
 import com.journey.bangkit.ui.common.UiState
 import com.journey.bangkit.ui.common.ViewModelFactory
 import com.journey.bangkit.ui.component.CardSkeleton
@@ -50,7 +52,7 @@ fun HomeJobSeekerScreen(
 ) {
     val histories = listOf("Software Engineer", "Web Developer")
     var isLoading by remember { mutableStateOf(true) }
-    var data by remember { mutableStateOf(listOf<Vacancy>()) }
+    var data by remember { mutableStateOf(listOf<VacancyResponse>()) }
 
     viewModel.vacancies.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
@@ -67,6 +69,7 @@ fun HomeJobSeekerScreen(
             is UiState.Error -> isLoading = false
         }
 
+        Log.d("mantap", data.toString())
         HomeJobSeekerContent(
             vacancies = data,
             histories = histories,
@@ -78,7 +81,7 @@ fun HomeJobSeekerScreen(
 @Composable
 fun HomeJobSeekerContent(
     modifier: Modifier = Modifier,
-    vacancies: List<Vacancy>,
+    vacancies: List<VacancyResponse>,
     histories: List<String>,
     isLoading: Boolean
 ) {
@@ -117,7 +120,7 @@ fun HomeJobSeekerContent(
                         onClick = { categorySelected = index },
                     ) {
                         Text(
-                            text = category,
+                            text = stringResource(id = category),
                             color = if (index == categorySelected) Blue40 else Color.White
                         )
                     }
@@ -138,7 +141,7 @@ fun HomeJobSeekerContent(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    items(vacancies, key = { it.id }) {
+                    items(vacancies[0].vacancies, key = { it.id }) {
                         Card(
                             modifier = modifier
                                 .fillMaxWidth()
@@ -146,7 +149,7 @@ fun HomeJobSeekerContent(
                             colors = CardDefaults.cardColors(containerColor = Color.White),
                             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
                         ) {
-                            Text(text = it.position)
+                            Text(text = it.placement_address)
                         }
                     }
                 }
@@ -160,7 +163,7 @@ fun HomeJobSeekerContent(
 private fun HomeJobSeekerPreview() {
     JourneyTheme {
         HomeJobSeekerContent(
-            vacancies = VacancyDataSource.vacanciesDummy(),
+            vacancies = listOf(VacancyDataSource.vacanciesDummy()),
             histories = listOf(),
             isLoading = false
         )

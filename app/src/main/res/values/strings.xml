@@ -51,6 +51,7 @@
     <string name="phonenumber_placeholder">Masukan nomor telepon</string>
     <string name="password_placeholder">Masukan password</string>
     <string name="disability_placeholder">Pilih jenis disabilitas</string>
+    <string name="disability_job_placeholder">Pilih jenis disabilitas untuk lowongan ini</string>
     <string name="companyname_placeholder">Masukan nama perusahaan</string>
     <string name="province_placeholder">Pilih provinsi</string>
     <string name="city_placeholder">Pilih kota</string>
@@ -61,6 +62,11 @@
     <string name="your_skills">Skill Anda</string>
     <string name="profile_photo">Foto Profil</string>
     <string name="photo">Foto</string>
+    <string name="placement_address_placeholder">Posisi apa yang dibutuhkan?</string>
+    <string name="description_placeholder">Deskripsi pekerjaan</string>
+    <string name="deadline_time_placeholder">Batas waktu</string>
+    <string name="skill_one_placeholder">Skill pertama yang dibutuhkan untuk lowongan ini</string>
+    <string name="skill_two_placeholder">Skill kedua yang dibutuhkan untuk lowongan ini</string>
 
     <!--  Title  -->
     <string name="vacancy">Lowongan</string>
@@ -71,9 +77,19 @@
     <string name="job_apply">Lamaran Kerja</string>
     <string name="job_vacancy">Lowongan Anda</string>
     <string name="job_vacancy_user">Pelamar Kerja</string>
+    <string name="add_vacancy">Tambah Lowongan</string>
 
     <!--  Button  -->
     <string name="search">Cari</string>
     <string name="cancel">Batal</string>
     <string name="logout">Keluar Akun</string>
+    <string name="submit" translatable="false">Submit</string>
+
+    <!--  Menu  -->
+    <string name="menu" translatable="false">Menu</string>
+    <string name="languages">Bahasa</string>
+    <string name="about_app">Tentang Aplikasi</string>
+    <string name="recommended_for_you">Rekomendasi untuk anda</string>
+    <string name="most_popular">Terpopuler</string>
+    <string name="newest">Terbaru</string>
 </resources>

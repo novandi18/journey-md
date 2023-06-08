@@ -53,7 +53,10 @@ object JourneyDataSource {
         ),
     )
 
-    val navigationCategory = listOf("Rekomendasi untuk anda", "Terpopuler", "Terbaru")
+    val navigationCategory = listOf(
+        R.string.recommended_for_you, R.string.most_popular, R.string.newest
+    )
+
     val user = User(
         id = "sdfsjkdhfksjv",
         full_name = "Novandi Ramadhan",
@@ -66,5 +69,9 @@ object JourneyDataSource {
         disability_name = "Blind",
         skill_one_name = "Web Development",
         skill_two_name = "Vector Illustration"
+    )
+
+    val menus = listOf(
+        R.string.languages, R.string.about_app
     )
 }

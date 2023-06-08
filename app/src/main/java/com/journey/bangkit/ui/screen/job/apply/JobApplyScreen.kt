@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.journey.bangkit.data.model.Vacancy
+import com.journey.bangkit.data.model.VacancyResponse
 import com.journey.bangkit.ui.common.UiState
 import com.journey.bangkit.ui.common.ViewModelFactory
 import com.journey.bangkit.ui.component.CardSkeleton
@@ -38,7 +38,7 @@ fun JobApplyScreen(
     viewModel: JobApplyViewModel = viewModel(factory = ViewModelFactory())
 ) {
     var isLoading by remember { mutableStateOf(false) }
-    var data by remember { mutableStateOf(listOf<Vacancy>()) }
+    var data by remember { mutableStateOf(listOf<VacancyResponse>()) }
 
     viewModel.vacancies.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
@@ -65,7 +65,7 @@ fun JobApplyScreen(
 @Composable
 fun JobApplyContent(
     modifier: Modifier = Modifier,
-    data: List<Vacancy>,
+    data: List<VacancyResponse>,
     isLoading: Boolean
 ) {
     Column(
@@ -80,7 +80,7 @@ fun JobApplyContent(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(data, key = { it.id }) {
+                items(data[0].vacancies, key = { it.id }) {
                     Card(
                         modifier = modifier
                             .fillMaxWidth()
@@ -88,7 +88,7 @@ fun JobApplyContent(
                         colors = CardDefaults.cardColors(containerColor = Light),
                         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
                     ) {
-                        Text(text = it.position)
+                        Text(text = it.placement_address)
                     }
                 }
             }

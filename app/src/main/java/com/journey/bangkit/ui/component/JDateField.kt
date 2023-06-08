@@ -3,25 +3,19 @@ package com.journey.bangkit.ui.component
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.EditCalendar
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,32 +27,23 @@ import com.journey.bangkit.ui.theme.Light
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun JTextField(
+fun JDateField(
     modifier: Modifier = Modifier,
-    leadingIcon: ImageVector,
-    label: String,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    placeholder: String,
-    isSingleLine: Boolean = true,
-    isReadOnly: Boolean = false,
+    openDialog: () -> Unit,
+    value: String
 ) {
-    var text by remember { mutableStateOf("") }
     val interactionSource = remember { MutableInteractionSource() }
 
     BasicTextField(
-        value = text,
-        onValueChange = { newText -> text = newText },
+        value = value,
+        onValueChange = {},
         modifier = modifier.fillMaxWidth(),
-        singleLine = isSingleLine,
         interactionSource = interactionSource,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        maxLines = if (isSingleLine) 1 else 7,
-        minLines = if (isSingleLine) 1 else 7,
         textStyle = TextStyle(textAlign = TextAlign.Start),
-        readOnly = isReadOnly
+        readOnly = true
     ) {
         OutlinedTextFieldDefaults.DecorationBox(
-            value = text,
+            value = value,
             innerTextField = { it() },
             enabled = true,
             singleLine = true,
@@ -66,23 +51,22 @@ fun JTextField(
             interactionSource = interactionSource,
             placeholder = {
                 Text(
-                    text = placeholder
+                    text = stringResource(id = R.string.deadline_time_placeholder)
                 )
             },
             leadingIcon = {
                 Icon(
-                    imageVector = leadingIcon,
-                    contentDescription = label
+                    imageVector = Icons.Filled.Timer,
+                    contentDescription = stringResource(id = R.string.deadline_time_placeholder)
                 )
             },
             trailingIcon = {
-                if (text.isNotBlank()) {
-                    IconButton(onClick = { text = "" }) {
-                        Icon(
-                            imageVector = Icons.Filled.Close,
-                            contentDescription = stringResource(id = R.string.clear)
-                        )
-                    }
+                IconButton(onClick = { openDialog() }) {
+                    Icon(
+                        imageVector = Icons.Filled.EditCalendar,
+                        contentDescription = stringResource(id = R.string.deadline_time_placeholder),
+                        tint = Dark
+                    )
                 }
             },
             colors = OutlinedTextFieldDefaults.colors(),
@@ -107,13 +91,11 @@ fun JTextField(
 
 @Preview(showBackground = true)
 @Composable
-fun JTextFieldPreview() {
+fun JDateFieldPreview() {
     JourneyTheme {
-        JTextField(
-            leadingIcon = Icons.Filled.Email,
-            label = "Email",
-            keyboardType = KeyboardType.Email,
-            placeholder = stringResource(id = R.string.email_placeholder)
+        JDateField(
+            openDialog = {},
+            value = ""
         )
     }
 }

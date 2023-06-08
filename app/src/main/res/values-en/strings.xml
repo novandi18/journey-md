@@ -23,10 +23,14 @@
     <string name="address">Address</string>
     <string name="company_name">Company Name</string>
     <string name="clear">Clear</string>
+    <string name="disability_job_placeholder">Choose disability type for this job</string>
     <string name="companyname_placeholder">Enter company name</string>
     <string name="city_placeholder">Choose city</string>
     <string name="loading">Loading…</string>
     <string name="search_placeholder">Search job</string>
+    <string name="placement_address_placeholder">What job position is required?</string>
+    <string name="description_placeholder">Job description</string>
+    <string name="deadline_time_placeholder">Deadline</string>
     <string name="vacancy">Vacancy</string>
     <string name="jobseeker">Job Seeker</string>
     <string name="jobprovider">Job Provider</string>
@@ -55,10 +59,18 @@
     <string name="job_apply">Job Apply</string>
     <string name="job_vacancy">Your Vacancy</string>
     <string name="job_vacancy_user">Applicant</string>
+    <string name="add_vacancy">New Vacancy</string>
     <string name="search">Search</string>
     <string name="cancel">Cancel</string>
     <string name="your_skills">Your Skills</string>
     <string name="profile_photo">Profile Photo</string>
     <string name="photo">Photo</string>
     <string name="logout">Account Logout</string>
+    <string name="languages">Languages</string>
+    <string name="about_app">About App</string>
+    <string name="recommended_for_you">Recommended for you</string>
+    <string name="most_popular">Most popular</string>
+    <string name="newest">Newest</string>
+    <string name="skill_one_placeholder">First skill required for this job</string>
+    <string name="skill_two_placeholder">Second skill required for this job</string>
 </resources>

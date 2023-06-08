@@ -13,4 +13,5 @@ sealed class Screen(val route: String) {
     object ProfileJobProvider : Screen("profile_jobprovider")
     object JobApply : Screen("job_apply")
     object JobApplicant : Screen("job_applicant")
+    object AddVacancy : Screen("add_vacancy")
 }

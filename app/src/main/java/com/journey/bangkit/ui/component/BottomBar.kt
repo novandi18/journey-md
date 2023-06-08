@@ -18,6 +18,9 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.journey.bangkit.data.source.JourneyDataSource
+import com.journey.bangkit.ui.navigation.AuthNavigation
+import com.journey.bangkit.ui.navigation.IntroNavigation
+import com.journey.bangkit.ui.navigation.JobSeekerNavigation
 import com.journey.bangkit.ui.navigation.Screen
 import com.journey.bangkit.ui.theme.Blue40
 import com.journey.bangkit.ui.theme.DarkGray40
@@ -28,19 +31,16 @@ import com.journey.bangkit.ui.theme.Light
 fun BottomBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    isJobSeeker: Boolean,
+    navigation: String,
     currentRoute: String?
 ) {
-//    val navigationItems = if (isJobSeeker) JourneyDataSource.navItemsJobSeeker else JourneyDataSource.navItemsJobProvider
-    val navigationItems = JourneyDataSource.navItemsJobSeeker
+    val navigationItems = if (navigation == JobSeekerNavigation.JOB_SEEKER_ROUTE)
+        JourneyDataSource.navItemsJobSeeker else JourneyDataSource.navItemsJobProvider
 
-    if (((currentRoute != Screen.OnBoarding.route &&
-        currentRoute != Screen.Started.route) &&
-        (currentRoute != Screen.LoginJobSeeker.route &&
-        currentRoute != Screen.LoginJobProvider.route)) &&
-        (currentRoute != Screen.RegisterJobSeeker.route &&
-        currentRoute != Screen.RegisterJobProvider.route)) {
-
+    if (
+        (navigation != IntroNavigation.INTRO_ROUTE || navigation != AuthNavigation.AUTH_ROUTE) &&
+        currentRoute != Screen.AddVacancy.route
+    ) {
         NavigationBar(
             modifier = modifier
                 .fillMaxWidth()
@@ -91,7 +91,7 @@ private fun BottomBarPreview() {
     JourneyTheme {
         BottomBar(
             navController = rememberAnimatedNavController(),
-            isJobSeeker = false,
+            navigation = "",
             currentRoute = ""
         )
     }
