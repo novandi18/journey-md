@@ -3,6 +3,7 @@ package com.journey.bangkit.ui.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
@@ -13,7 +14,7 @@ import com.journey.bangkit.ui.screen.job.applicant.JobApplicantScreen
 import com.journey.bangkit.ui.screen.profile.jobprovider.ProfileJobProviderScreen
 
 @OptIn(ExperimentalAnimationApi::class)
-fun NavGraphBuilder.jobProviderGraph(navController: NavController) {
+fun NavGraphBuilder.jobProviderGraph(navController: NavController, setBottomBarState: (Boolean) -> Unit) {
     navigation(startDestination = Screen.HomeJobProvider.route, route = JobProviderNavigation.JOB_PROVIDER_ROUTE) {
         composable(Screen.HomeJobProvider.route,
             enterTransition = {
@@ -26,6 +27,9 @@ fun NavGraphBuilder.jobProviderGraph(navController: NavController) {
                 }
             }
         ) {
+            LaunchedEffect(Unit) {
+                setBottomBarState(true)
+            }
             HomeJobProviderScreen(
                 navigateToAdd = {
                     navController.navigate(Screen.AddVacancy.route)
@@ -74,6 +78,9 @@ fun NavGraphBuilder.jobProviderGraph(navController: NavController) {
                 }
             }
         ) {
+            LaunchedEffect(Unit) {
+                setBottomBarState(false)
+            }
             AddVacancyScreen(
                 isPreviousBack = navController.previousBackStackEntry,
                 doBack = {

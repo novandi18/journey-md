@@ -73,4 +73,11 @@
     <string name="newest">Newest</string>
     <string name="skill_one_placeholder">First skill required for this job</string>
     <string name="skill_two_placeholder">Second skill required for this job</string>
+    <string name="all">All</string>
+    <string name="deadline_close">Closed at</string>
+    <string name="detail_vacancy">Vacancy Detail</string>
+    <string name="apply">Apply</string>
+    <string name="apply_before">Apply before</string>
+    <string name="vacancy_apply">This vacancy is for</string>
+    <string name="skill_requiremnt">Skill Requirements</string>
 </resources>

@@ -1,31 +1,22 @@
-package com.journey.bangkit.data.model
+package com.journey.bangkit.data.local
 
-data class VacancyResponse(
-    val status: String,
-    val page: Int,
-    val limit: Int,
-    val totalVacancies: Int,
-    val totalPages: Int,
-    var vacancies: List<Vacancy>
-)
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class VacancyDetail(
-    val status: String,
-    val vacancy: Vacancy
-)
-
-data class Vacancy(
+@Entity
+data class VacancyEntity(
+    @PrimaryKey
     val id: String,
     val placement_address: String,
     val description: String,
     val created_at: String,
     val updated_at: String,
     val deadline_time: String,
-    val job_type: Int,
     val skill_one_name: String,
     val skill_two_name: String,
     val disability_name: String,
     val company_logo: String,
+    val job_type: Int,
     val sector_name: String,
     val company_name: String
 )

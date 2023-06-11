@@ -22,15 +22,19 @@ object VacancyDataSource {
 
             dataVacancy.add(
                 Vacancy(
-                    id = i,
+                    id = i.toString(),
                     placement_address = "Position $i",
-                    description = "Deskripsi $i",
-                    sector = "Sector $i",
+                    description = JourneyDataSource.dummyDesc,
                     created_at = "2023-06-01T07:59:04.938Z",
                     updated_at = "2023-06-01T07:59:04.938Z",
                     disability_name = randomDisability.name,
                     deadline_time = "2023-05-29T09:14:30.000Z",
-                    company_name = "Company $i"
+                    skill_one_name = "Skill one $i",
+                    skill_two_name = "Skill two $i",
+                    company_logo = "",
+                    job_type = 0,
+                    company_name = "Company",
+                    sector_name = "Advertising"
                 )
             )
 

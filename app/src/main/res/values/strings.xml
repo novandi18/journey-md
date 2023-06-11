@@ -78,12 +78,14 @@
     <string name="job_vacancy">Lowongan Anda</string>
     <string name="job_vacancy_user">Pelamar Kerja</string>
     <string name="add_vacancy">Tambah Lowongan</string>
+    <string name="detail_vacancy">Detail Lowongan</string>
 
     <!--  Button  -->
     <string name="search">Cari</string>
     <string name="cancel">Batal</string>
     <string name="logout">Keluar Akun</string>
     <string name="submit" translatable="false">Submit</string>
+    <string name="apply">Lamar</string>
 
     <!--  Menu  -->
     <string name="menu" translatable="false">Menu</string>
@@ -92,4 +94,11 @@
     <string name="recommended_for_you">Rekomendasi untuk anda</string>
     <string name="most_popular">Terpopuler</string>
     <string name="newest">Terbaru</string>
+    <string name="all">Semua</string>
+
+    <!--  General  -->
+    <string name="deadline_close">Tutup pada</string>
+    <string name="apply_before">Lamar sebelum</string>
+    <string name="vacancy_apply">Lowongan ini untuk</string>
+    <string name="skill_requiremnt">Syarat Kemampuan</string>
 </resources>

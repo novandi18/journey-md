@@ -1,6 +1,9 @@
 package com.journey.bangkit.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -18,10 +21,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.journey.bangkit.data.source.JourneyDataSource
-import com.journey.bangkit.ui.navigation.AuthNavigation
-import com.journey.bangkit.ui.navigation.IntroNavigation
-import com.journey.bangkit.ui.navigation.JobSeekerNavigation
-import com.journey.bangkit.ui.navigation.Screen
+import com.journey.bangkit.ui.navigation.NavigationItem
 import com.journey.bangkit.ui.theme.Blue40
 import com.journey.bangkit.ui.theme.DarkGray40
 import com.journey.bangkit.ui.theme.JourneyTheme
@@ -31,15 +31,13 @@ import com.journey.bangkit.ui.theme.Light
 fun BottomBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    navigation: String,
-    currentRoute: String?
+    bottomBarState: Boolean,
+    navigationItems: List<NavigationItem>
 ) {
-    val navigationItems = if (navigation == JobSeekerNavigation.JOB_SEEKER_ROUTE)
-        JourneyDataSource.navItemsJobSeeker else JourneyDataSource.navItemsJobProvider
-
-    if (
-        (navigation != IntroNavigation.INTRO_ROUTE || navigation != AuthNavigation.AUTH_ROUTE) &&
-        currentRoute != Screen.AddVacancy.route
+    AnimatedVisibility(
+        visible = bottomBarState,
+        enter = slideInVertically(initialOffsetY = { it }),
+        exit = slideOutVertically(targetOffsetY = { it })
     ) {
         NavigationBar(
             modifier = modifier
@@ -55,7 +53,7 @@ fun BottomBar(
                             contentDescription = stringResource(id = item.contentDescription)
                         )
                     },
-                    selected = currentRoute == item.screen.route,
+                    selected = false,
                     colors = NavigationBarItemDefaults.colors(
                         indicatorColor = Blue40,
                         selectedTextColor = Blue40,
@@ -91,8 +89,8 @@ private fun BottomBarPreview() {
     JourneyTheme {
         BottomBar(
             navController = rememberAnimatedNavController(),
-            navigation = "",
-            currentRoute = ""
+            bottomBarState = true,
+            navigationItems = JourneyDataSource.navItemsJobSeeker
         )
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Work
 import androidx.compose.material.icons.filled.WorkHistory
 import com.journey.bangkit.R
 import com.journey.bangkit.data.model.User
+import com.journey.bangkit.data.model.Vacancy
 import com.journey.bangkit.ui.navigation.NavigationItem
 import com.journey.bangkit.ui.navigation.Screen
 
@@ -54,7 +55,7 @@ object JourneyDataSource {
     )
 
     val navigationCategory = listOf(
-        R.string.recommended_for_you, R.string.most_popular, R.string.newest
+        R.string.recommended_for_you, R.string.most_popular, R.string.newest, R.string.all
     )
 
     val user = User(
@@ -71,7 +72,29 @@ object JourneyDataSource {
         skill_two_name = "Vector Illustration"
     )
 
+
     val menus = listOf(
         R.string.languages, R.string.about_app
+    )
+
+    val jobTypes = listOf(
+        "Full-time", "Part-time", "Remote"
+    )
+
+    val dummyDesc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet blandit mauris. Integer nisl ex, semper ut erat quis, molestie laoreet leo. In faucibus lobortis arcu a rutrum. Suspendisse porttitor posuere varius. Aenean elementum eu lorem a elementum. Etiam lorem tellus, ornare et ullamcorper et, dictum ac turpis. Mauris porta venenatis odio eu porttitor. Aliquam erat volutpat. Praesent elementum ipsum non justo accumsan, ac semper libero ultrices. Nulla facilisi. Integer non metus sem. Phasellus vulputate pellentesque diam et aliquet. Aliquam pellentesque nunc et metus rhoncus fringilla."
+    val vacancy = Vacancy(
+        id = "",
+        placement_address = "Position",
+        description = dummyDesc,
+        created_at = "2023-06-01T07:59:04.938Z",
+        updated_at = "2023-06-01T07:59:04.938Z",
+        disability_name = "Disability Name",
+        deadline_time = "2023-05-29T09:14:30.000Z",
+        skill_one_name = "Skill one",
+        skill_two_name = "Skill two",
+        company_logo = "",
+        job_type = 0,
+        company_name = "Company",
+        sector_name = "Advertising"
     )
 }
