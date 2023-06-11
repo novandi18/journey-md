@@ -7,6 +7,10 @@ import com.journey.bangkit.data.model.City
 import com.journey.bangkit.data.model.Province
 import com.journey.bangkit.data.model.Sector
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 fun getJsonDataFromAsset(context: Context, fileName: String): String? {
     val jsonString: String
@@ -42,3 +46,11 @@ fun getSector(context: Context): List<Sector> {
 
     return gson.fromJson(sector, listSector)
 }
+
+fun convertMillisToDate(milliseconds: Long): String {
+    val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+    return dateFormatter.format(milliseconds)
+}
+
+fun String.toDate(): String = ZonedDateTime.parse(this)
+    .format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))

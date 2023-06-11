@@ -2,13 +2,17 @@ package com.journey.bangkit.ui.screen.onboarding
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowForward
@@ -49,8 +53,9 @@ fun OnBoardingScreen(
     val data = OnBoardingDataSource.data
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(
-        initialPage = 0
-    )
+        initialPage = 0,
+        initialPageOffsetFraction = 0f
+    ) { 3 }
     val context = LocalContext.current
 
     Box(
@@ -58,13 +63,28 @@ fun OnBoardingScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        HorizontalPager(pageCount = data.size, state = pagerState) { pageIndex ->
-            OnBoardingContent(
-                modifier = modifier,
-                data = data,
-                pageIndex = pageIndex
-            )
-        }
+        HorizontalPager(
+            modifier = Modifier,
+            state = pagerState,
+            pageSpacing = 0.dp,
+            userScrollEnabled = true,
+            reverseLayout = false,
+            contentPadding = PaddingValues(0.dp),
+            beyondBoundsPageCount = 0,
+            pageSize = PageSize.Fill,
+            flingBehavior = PagerDefaults.flingBehavior(state = pagerState),
+            key = null,
+            pageNestedScrollConnection = PagerDefaults.pageNestedScrollConnection(
+                Orientation.Horizontal
+            ),
+            pageContent =  {
+                OnBoardingContent(
+                    modifier = modifier,
+                    data = data,
+                    pageIndex = it
+                )
+            }
+        )
 
         Box(
             modifier = modifier

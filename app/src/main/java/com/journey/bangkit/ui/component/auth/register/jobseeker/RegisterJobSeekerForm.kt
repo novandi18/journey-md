@@ -12,7 +12,7 @@ import androidx.compose.material.icons.filled.Person3
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -32,7 +32,7 @@ fun RegisterJobSeekerForm(
     modifier: Modifier = Modifier,
     disabilityData: List<Disability>
 ) {
-    var disabilitySelected by rememberSaveable { mutableStateOf(0) }
+    var disabilitySelected by rememberSaveable { mutableIntStateOf(0) }
     val provinces = disabilityData.map { it.name }
 
     Column(

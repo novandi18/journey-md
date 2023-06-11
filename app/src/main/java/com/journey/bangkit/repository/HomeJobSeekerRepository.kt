@@ -1,21 +1,18 @@
 package com.journey.bangkit.repository
 
-import com.journey.bangkit.data.model.Vacancy
-import com.journey.bangkit.data.source.VacancyDataSource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import androidx.paging.Pager
+import androidx.paging.map
+import com.journey.bangkit.data.local.VacancyEntity
+import com.journey.bangkit.data.mappers.toVacancy
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class HomeJobSeekerRepository {
-    fun getAllVacancies(): Flow<List<Vacancy>> = flowOf(VacancyDataSource.vacanciesDummy())
-
-    companion object {
-        @Volatile
-        private var instance: HomeJobSeekerRepository? = null
-
-        fun getInstance(): HomeJobSeekerRepository = instance ?: synchronized(this) {
-            HomeJobSeekerRepository().apply {
-                instance = this
-            }
+class HomeJobSeekerRepository @Inject constructor(
+    private val pager: Pager<Int, VacancyEntity>
+) {
+    fun getAllVacancies() = pager
+        .flow
+        .map { pagingData ->
+            pagingData.map { it.toVacancy() }
         }
-    }
 }

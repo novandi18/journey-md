@@ -2,7 +2,6 @@ package com.journey.bangkit.ui.component
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -11,8 +10,8 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,12 +20,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.journey.bangkit.R
+import com.journey.bangkit.ui.theme.Blue40
+import com.journey.bangkit.ui.theme.Dark
 import com.journey.bangkit.ui.theme.JourneyTheme
+import com.journey.bangkit.ui.theme.Light
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,7 +38,9 @@ fun JTextField(
     leadingIcon: ImageVector,
     label: String,
     keyboardType: KeyboardType = KeyboardType.Text,
-    placeholder: String
+    placeholder: String,
+    isSingleLine: Boolean = true,
+    isReadOnly: Boolean = false,
 ) {
     var text by remember { mutableStateOf("") }
     val interactionSource = remember { MutableInteractionSource() }
@@ -43,12 +48,16 @@ fun JTextField(
     BasicTextField(
         value = text,
         onValueChange = { newText -> text = newText },
-        modifier = modifier.fillMaxWidth().height(56.dp),
-        singleLine = true,
+        modifier = modifier.fillMaxWidth(),
+        singleLine = isSingleLine,
         interactionSource = interactionSource,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        maxLines = if (isSingleLine) 1 else 7,
+        minLines = if (isSingleLine) 1 else 7,
+        textStyle = TextStyle(textAlign = TextAlign.Start),
+        readOnly = isReadOnly
     ) {
-        TextFieldDefaults.OutlinedTextFieldDecorationBox(
+        OutlinedTextFieldDefaults.DecorationBox(
             value = text,
             innerTextField = { it() },
             enabled = true,
@@ -56,7 +65,9 @@ fun JTextField(
             visualTransformation = VisualTransformation.None,
             interactionSource = interactionSource,
             placeholder = {
-                Text(text = placeholder)
+                Text(
+                    text = placeholder
+                )
             },
             leadingIcon = {
                 Icon(
@@ -73,7 +84,23 @@ fun JTextField(
                         )
                     }
                 }
-            }
+            },
+            colors = OutlinedTextFieldDefaults.colors(),
+            contentPadding = OutlinedTextFieldDefaults.contentPadding(),
+            container = {
+                OutlinedTextFieldDefaults.ContainerBox(
+                    enabled = true,
+                    isError = false,
+                    interactionSource = interactionSource,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Blue40,
+                        focusedContainerColor = Light,
+                        focusedTextColor = Dark,
+                        cursorColor = Dark,
+                        unfocusedContainerColor = Light
+                    )
+                )
+            },
         )
     }
 }
