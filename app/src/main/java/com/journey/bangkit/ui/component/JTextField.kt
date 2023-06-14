@@ -13,10 +13,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -41,13 +38,14 @@ fun JTextField(
     placeholder: String,
     isSingleLine: Boolean = true,
     isReadOnly: Boolean = false,
+    onKeyUp: (String) -> Unit,
+    textValue: String
 ) {
-    var text by remember { mutableStateOf("") }
     val interactionSource = remember { MutableInteractionSource() }
 
     BasicTextField(
-        value = text,
-        onValueChange = { newText -> text = newText },
+        value = textValue,
+        onValueChange = { newText -> onKeyUp(newText) },
         modifier = modifier.fillMaxWidth(),
         singleLine = isSingleLine,
         interactionSource = interactionSource,
@@ -58,7 +56,7 @@ fun JTextField(
         readOnly = isReadOnly
     ) {
         OutlinedTextFieldDefaults.DecorationBox(
-            value = text,
+            value = textValue,
             innerTextField = { it() },
             enabled = true,
             singleLine = true,
@@ -76,8 +74,8 @@ fun JTextField(
                 )
             },
             trailingIcon = {
-                if (text.isNotBlank()) {
-                    IconButton(onClick = { text = "" }) {
+                if (textValue.isNotBlank()) {
+                    IconButton(onClick = { onKeyUp("") }) {
                         Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = stringResource(id = R.string.clear)
@@ -113,7 +111,9 @@ fun JTextFieldPreview() {
             leadingIcon = Icons.Filled.Email,
             label = "Email",
             keyboardType = KeyboardType.Email,
-            placeholder = stringResource(id = R.string.email_placeholder)
+            placeholder = stringResource(id = R.string.email_placeholder),
+            onKeyUp = {},
+            textValue = ""
         )
     }
 }

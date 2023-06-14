@@ -8,7 +8,7 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.journey.bangkit.data.api.JourneyApi
 import com.journey.bangkit.data.local.JourneyDatabase
-import com.journey.bangkit.data.local.VacancyEntity
+import com.journey.bangkit.data.local.vacancy.VacancyEntity
 import com.journey.bangkit.data.mappers.toVacancyEntity
 import retrofit2.HttpException
 import java.io.IOException
@@ -23,6 +23,7 @@ class JourneyRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, VacancyEntity>
     ): MediatorResult {
+        Log.d("okey", category.toString())
         return try {
             val pageSize = 1
             val loadKey = when (loadType) {
@@ -35,8 +36,6 @@ class JourneyRemoteMediator(
                     if (lastItem == null) 1 else pageSize + 1
                 }
             }
-
-            Log.d("cate", category.toString())
 
 //            val vacancies = when (category) {
 //                0 -> api.getVacancies(page = loadKey)

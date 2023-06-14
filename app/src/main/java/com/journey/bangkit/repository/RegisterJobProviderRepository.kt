@@ -1,16 +1,23 @@
 package com.journey.bangkit.repository
 
 import android.content.Context
+import com.journey.bangkit.data.api.JourneyApi
 import com.journey.bangkit.data.model.City
 import com.journey.bangkit.data.model.Province
 import com.journey.bangkit.data.model.Sector
+import com.journey.bangkit.data.model.UserJobProvider
+import com.journey.bangkit.data.model.UserJobSeeker
+import com.journey.bangkit.data.model.UserRegisterResponse
 import com.journey.bangkit.utils.getCityById
 import com.journey.bangkit.utils.getProvince
 import com.journey.bangkit.utils.getSector
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
 
-class RegisterJobProviderRepository {
+class RegisterJobProviderRepository @Inject constructor(
+    private val api: JourneyApi
+) {
     fun getProvinceCitySector(context: Context, provinceId: Int)
     : Flow<Triple<List<Province>,List<City>, List<Sector>>> {
         val province = getProvince(context)
@@ -19,14 +26,9 @@ class RegisterJobProviderRepository {
         return flowOf(Triple(province, city, sector))
     }
 
-    companion object {
-        @Volatile
-        private var instance: RegisterJobProviderRepository? = null
-
-        fun getInstance(): RegisterJobProviderRepository = instance ?: synchronized(this) {
-            RegisterJobProviderRepository().apply {
-                instance = this
-            }
-        }
+    suspend fun doRegister(data: UserJobProvider): Flow<UserRegisterResponse> {
+        return flowOf(
+            api.registerJobProvider(data)
+        )
     }
 }

@@ -11,6 +11,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.journey.bangkit.data.source.JourneyDataSource
 import com.journey.bangkit.ui.component.BottomBar
+import com.journey.bangkit.ui.navigation.AuthNavigation
+import com.journey.bangkit.ui.navigation.IntroNavigation
 import com.journey.bangkit.ui.navigation.JobSeekerNavigation
 import com.journey.bangkit.ui.navigation.NavigationItem
 import com.journey.bangkit.ui.navigation.Screen
@@ -24,15 +26,16 @@ import com.journey.bangkit.ui.navigation.jobSeekerGraph
 fun JourneyApp(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    onBoardingSkip: Boolean,
+    stateStart: String,
     bottomBarState: Boolean,
     setBottomBarState: (Boolean) -> Unit,
     setNavigationItem: (List<NavigationItem>) -> Unit,
     navigationItem: List<NavigationItem>
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
-    when (navBackStackEntry?.destination?.route) {
+    when (currentRoute) {
         Screen.OnBoarding.route -> setBottomBarState(false)
         Screen.Started.route -> setBottomBarState(false)
         Screen.LoginJobSeeker.route -> setBottomBarState(false)
@@ -54,17 +57,18 @@ fun JourneyApp(
             BottomBar(
                 navController = navController,
                 bottomBarState = bottomBarState,
-                navigationItems = JourneyDataSource.navItemsJobSeeker
+                navigationItems = navigationItem,
+                currentRoute = currentRoute
             )
         },
         content = { innerPadding ->
             AnimatedNavHost(
                 navController = navController,
                 modifier = modifier.padding(innerPadding),
-                startDestination = JobSeekerNavigation.JOB_SEEKER_ROUTE
+                startDestination = stateStart
             ) {
                 introGraph(navController)
-                authGraph(navController)
+                authGraph(navController, setNavigationItem)
                 jobSeekerGraph(navController, setBottomBarState)
                 jobProviderGraph(navController, setBottomBarState)
             }

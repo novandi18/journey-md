@@ -32,7 +32,8 @@ fun BottomBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     bottomBarState: Boolean,
-    navigationItems: List<NavigationItem>
+    navigationItems: List<NavigationItem>,
+    currentRoute: String?
 ) {
     AnimatedVisibility(
         visible = bottomBarState,
@@ -45,7 +46,7 @@ fun BottomBar(
                 .shadow(elevation = 16.dp),
             containerColor = Light
         ) {
-            navigationItems.map { item ->
+            JourneyDataSource.navItemsJobSeeker.map { item ->
                 NavigationBarItem(
                     icon = {
                         Icon(
@@ -53,7 +54,7 @@ fun BottomBar(
                             contentDescription = stringResource(id = item.contentDescription)
                         )
                     },
-                    selected = false,
+                    selected = currentRoute == item.screen.route,
                     colors = NavigationBarItemDefaults.colors(
                         indicatorColor = Blue40,
                         selectedTextColor = Blue40,
@@ -90,7 +91,8 @@ private fun BottomBarPreview() {
         BottomBar(
             navController = rememberAnimatedNavController(),
             bottomBarState = true,
-            navigationItems = JourneyDataSource.navItemsJobSeeker
+            navigationItems = JourneyDataSource.navItemsJobSeeker,
+            currentRoute = "home_jobseeker"
         )
     }
 }

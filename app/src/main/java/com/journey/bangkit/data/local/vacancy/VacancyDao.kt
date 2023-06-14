@@ -1,4 +1,4 @@
-package com.journey.bangkit.data.local
+package com.journey.bangkit.data.local.vacancy
 
 import androidx.paging.PagingSource
 import androidx.room.Dao

@@ -22,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.journey.bangkit.R
 import com.journey.bangkit.data.source.OnBoardingDataSource
@@ -48,7 +50,7 @@ import com.journey.bangkit.viewmodel.OnBoardingViewModel
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
     navigateToStarted: () -> Unit,
-    viewModel: OnBoardingViewModel = viewModel(factory = ViewModelFactory())
+    viewModel: OnBoardingViewModel = hiltViewModel()
 ) {
     val data = OnBoardingDataSource.data
     val coroutineScope = rememberCoroutineScope()
@@ -56,7 +58,6 @@ fun OnBoardingScreen(
         initialPage = 0,
         initialPageOffsetFraction = 0f
     ) { 3 }
-    val context = LocalContext.current
 
     Box(
         modifier = modifier
@@ -95,7 +96,9 @@ fun OnBoardingScreen(
         ) {
             TextButton(
                 onClick = {
-                    viewModel.saveOnBoardingState(isCompleted = true, context = context)
+                    coroutineScope.launch {
+                        viewModel.setOnBoardingIsCompleted(true)
+                    }
                     navigateToStarted()
                 },
                 modifier = modifier.align(alignment = Alignment.CenterStart)
@@ -120,7 +123,9 @@ fun OnBoardingScreen(
                             pagerState.animateScrollToPage(nextPageIndex)
                         }
                     } else {
-                        viewModel.saveOnBoardingState(isCompleted = true, context = context)
+                        coroutineScope.launch {
+                            viewModel.setOnBoardingIsCompleted(true)
+                        }
                         navigateToStarted()
                     }
                 },

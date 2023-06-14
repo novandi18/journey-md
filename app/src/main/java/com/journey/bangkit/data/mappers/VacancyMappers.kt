@@ -1,6 +1,6 @@
 package com.journey.bangkit.data.mappers
 
-import com.journey.bangkit.data.local.VacancyEntity
+import com.journey.bangkit.data.local.vacancy.VacancyEntity
 import com.journey.bangkit.data.model.Vacancy
 
 fun Vacancy.toVacancyEntity(): VacancyEntity {

@@ -80,4 +80,8 @@
     <string name="apply_before">Apply before</string>
     <string name="vacancy_apply">This vacancy is for</string>
     <string name="skill_requiremnt">Skill Requirements</string>
+    <string name="continue_register">Continue</string>
+    <string name="gender_placeholder">Choose gender</string>
+    <string name="man">Man</string>
+    <string name="woman">Woman</string>
 </resources>

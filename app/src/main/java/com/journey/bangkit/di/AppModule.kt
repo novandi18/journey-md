@@ -6,7 +6,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.room.Room
 import com.journey.bangkit.data.local.JourneyDatabase
-import com.journey.bangkit.data.local.VacancyEntity
+import com.journey.bangkit.data.local.vacancy.VacancyEntity
 import com.journey.bangkit.data.api.JourneyApi
 import com.journey.bangkit.data.remote.JourneyRemoteMediator
 import com.journey.bangkit.viewmodel.VacancyCategory
@@ -30,7 +30,7 @@ object AppModule {
             context,
             JourneyDatabase::class.java,
             "vacancies.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides

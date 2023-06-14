@@ -1,4 +1,4 @@
-package com.journey.bangkit.data.local
+package com.journey.bangkit.data.local.vacancy
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
