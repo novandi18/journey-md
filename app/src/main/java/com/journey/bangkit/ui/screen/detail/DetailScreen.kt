@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -71,24 +72,57 @@ fun DetailScreen(
 ) {
     val context = LocalContext.current
     var data by remember { mutableStateOf(listOf<VacancyDetail>()) }
+    var applyLoading by remember { mutableStateOf(false) }
 
     viewModel.vacancy.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when(uiState) {
-            is UiState.Loading -> viewModel.getVacancy(vacancyId)
-            is UiState.Success -> data = listOf(uiState.data)
-            is UiState.Error -> Toast.makeText(context, uiState.errorMessage, Toast.LENGTH_SHORT).show()
+            is UiState.Loading -> {
+                viewModel.getVacancy(vacancyId)
+            }
+            is UiState.Success -> {
+                data = listOf(uiState.data)
+            }
+            is UiState.Error -> {
+                Toast.makeText(context, uiState.errorMessage, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    DetailBar(data = data, isPreviousBack = isPreviousBack, doBack = doBack)
+    DetailBar(
+        data = data,
+        isPreviousBack = isPreviousBack,
+        doBack = doBack,
+        doApply = {
+            applyLoading = true
+            viewModel.doApplyVacancy(vacancyId)
+        }
+    )
+
+    val applyResponse by viewModel.response.collectAsState(initial = UiState.Loading)
+    LaunchedEffect(applyResponse) {
+        applyResponse.let { response ->
+            when (response) {
+                is UiState.Loading -> {}
+                is UiState.Success -> {
+                    applyLoading = false
+                    Toast.makeText(context, response.data.message, Toast.LENGTH_SHORT).show()
+                }
+                is UiState.Error -> {
+                    applyLoading = false
+                    Toast.makeText(context, response.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailBar(
     data: List<VacancyDetail>,
-    isPreviousBack: NavBackStackEntry?,
-    doBack: () -> Unit
+    isPreviousBack: NavBackStackEntry? = null,
+    doBack: () -> Unit,
+    doApply: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -159,7 +193,9 @@ fun DetailBar(
                                         .background(brush = shimmerEffect(), shape = CircleShape)
                                 )
                             } else {
-                                Button(onClick = {}) {
+                                Button(
+                                    onClick = { doApply() },
+                                ) {
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -195,7 +231,7 @@ fun DetailBar(
 
 @Composable
 fun DetailContent(
-    data: List<VacancyDetail>,
+    data: List<VacancyDetail> = listOf(),
     innerPadding: PaddingValues
 ) {
     Column(
@@ -443,6 +479,18 @@ private fun DetailPreview() {
                 vacancy = JourneyDataSource.vacancy
             )),
             innerPadding = PaddingValues()
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DetailBarPreview() {
+    JourneyTheme {
+        DetailBar(
+            data = listOf(),
+            doBack = {},
+            doApply = {}
         )
     }
 }

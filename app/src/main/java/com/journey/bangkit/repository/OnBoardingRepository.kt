@@ -1,28 +1,21 @@
 package com.journey.bangkit.repository
 
-import android.content.Context
-import com.journey.bangkit.data.store.JourneyDataStore
-import kotlinx.coroutines.flow.Flow
+import com.journey.bangkit.data.local.JourneyDatabase
+import com.journey.bangkit.data.local.auth.AuthEntity
+import com.journey.bangkit.data.local.page.PageEntity
+import javax.inject.Inject
 
-class OnBoardingRepository {
-    suspend fun saveOnBoardingState(isCompleted: Boolean, context: Context) {
-        val dataStore = JourneyDataStore(context)
-        dataStore.saveOnBoardingState(isCompleted)
+class OnBoardingRepository @Inject constructor(
+    private val db: JourneyDatabase
+) {
+    suspend fun upsertAll() {
+        db.authDao.upsertAllAuth(AuthEntity())
+        db.pageDao.setInitialPage(PageEntity())
     }
 
-    fun getOnBoardingState(context: Context): Flow<Boolean> {
-        val dataStore = JourneyDataStore(context)
-        return dataStore.isOnBoardingCompleted
-    }
+    suspend fun getAll(): AuthEntity = db.authDao.getOnBoardingAndAuth()
 
-    companion object {
-        @Volatile
-        private var instance: OnBoardingRepository? = null
-
-        fun getInstance(): OnBoardingRepository = instance ?: synchronized(this) {
-            OnBoardingRepository().apply {
-                instance = this
-            }
-        }
+    suspend fun updateOnBoarding(isCompleted: Boolean) {
+        db.authDao.setIsOnBoardingCompleted(isCompleted)
     }
 }

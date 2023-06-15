@@ -1,5 +1,7 @@
 package com.journey.bangkit.ui.navigation
 
+import android.os.Bundle
+
 sealed class Screen(val route: String) {
     object OnBoarding : Screen("onboarding")
     object Started : Screen("started")
@@ -7,6 +9,7 @@ sealed class Screen(val route: String) {
     object LoginJobProvider : Screen("login_jobprovider")
     object RegisterJobSeeker : Screen("register_jobseeker")
     object RegisterJobProvider : Screen("register_jobprovider")
+    object SkillJobSeeker : Screen("skill_jobseeker")
     object HomeJobSeeker : Screen("home_jobseeker")
     object HomeJobProvider : Screen("home_jobprovider")
     object ProfileJobSeeker : Screen("profile_jobseeker")

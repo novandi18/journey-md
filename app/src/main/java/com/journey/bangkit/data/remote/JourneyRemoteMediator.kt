@@ -1,6 +1,5 @@
 package com.journey.bangkit.data.remote
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -8,7 +7,7 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.journey.bangkit.data.api.JourneyApi
 import com.journey.bangkit.data.local.JourneyDatabase
-import com.journey.bangkit.data.local.VacancyEntity
+import com.journey.bangkit.data.local.vacancy.VacancyEntity
 import com.journey.bangkit.data.mappers.toVacancyEntity
 import retrofit2.HttpException
 import java.io.IOException
@@ -16,15 +15,16 @@ import java.io.IOException
 @OptIn(ExperimentalPagingApi::class)
 class JourneyRemoteMediator(
     private val db: JourneyDatabase,
-    private val api: JourneyApi,
-    private val category: Int
+    private val api: JourneyApi
 ): RemoteMediator<Int, VacancyEntity>() {
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, VacancyEntity>
     ): MediatorResult {
         return try {
+            val currentPage = db.pageDao.getPage()
             val pageSize = 1
+
             val loadKey = when (loadType) {
                 LoadType.REFRESH -> 1
                 LoadType.PREPEND -> return MediatorResult.Success(
@@ -36,16 +36,14 @@ class JourneyRemoteMediator(
                 }
             }
 
-            Log.d("cate", category.toString())
+            val vacancies = when (currentPage.pageType) {
+                1 -> api.getVacancies(page = loadKey)
+                2 -> api.getPopularVacancies(page = loadKey)
+                3 -> api.getLatestVacancies(page = loadKey)
+                else -> api.getVacancies(page = loadKey)
+            }
 
-//            val vacancies = when (category) {
-//                0 -> api.getVacancies(page = loadKey)
-//                1 -> api.getPopularVacancies(page = loadKey)
-//                2 -> api.getLatestVacancies(page = loadKey)
-//                else -> api.getVacancies(page = loadKey)
-//            }
-
-            val vacancies = api.getVacancies(page = loadKey)
+            // val vacancies = api.getVacancies(page = loadKey)
 
             db.withTransaction {
                 if (loadType == LoadType.REFRESH) {

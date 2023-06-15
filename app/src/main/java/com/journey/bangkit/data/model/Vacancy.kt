@@ -10,22 +10,22 @@ data class VacancyResponse(
 )
 
 data class VacancyDetail(
-    val status: String,
+    val status: String = "",
     val vacancy: Vacancy
 )
 
 data class Vacancy(
-    val id: String,
-    val placement_address: String,
-    val description: String,
-    val created_at: String,
-    val updated_at: String,
-    val deadline_time: String,
-    val job_type: Int,
-    val skill_one_name: String,
-    val skill_two_name: String,
-    val disability_name: String,
-    val company_logo: String,
-    val sector_name: String,
-    val company_name: String
+    val id: String = "",
+    val placement_address: String = "",
+    val description: String = "",
+    val created_at: String = "",
+    val updated_at: String = "",
+    val deadline_time: String = "",
+    val job_type: Int = 0,
+    val skill_one_name: String = "",
+    val skill_two_name: String = "",
+    val disability_name: String = "",
+    val company_logo: String = "",
+    val sector_name: String = "",
+    val company_name: String = ""
 )

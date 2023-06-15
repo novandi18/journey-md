@@ -2,6 +2,7 @@ package com.journey.bangkit.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.journey.bangkit.data.model.UserApplyResponse
 import com.journey.bangkit.data.model.VacancyDetail
 import com.journey.bangkit.repository.DetailVacancyRepository
 import com.journey.bangkit.ui.common.UiState
@@ -18,6 +19,9 @@ constructor(private val repository: DetailVacancyRepository) : ViewModel() {
     private val _vacancy: MutableStateFlow<UiState<VacancyDetail>> = MutableStateFlow(UiState.Loading)
     val vacancy: StateFlow<UiState<VacancyDetail>> get() = _vacancy
 
+    private val _response: MutableStateFlow<UiState<UserApplyResponse>> = MutableStateFlow(UiState.Loading)
+    val response: StateFlow<UiState<UserApplyResponse>> get() = _response
+
     fun getVacancy(id: String) {
         viewModelScope.launch {
             repository.getVacancyById(id)
@@ -26,6 +30,18 @@ constructor(private val repository: DetailVacancyRepository) : ViewModel() {
                 }
                 .collect { result ->
                     _vacancy.value = UiState.Success(result)
+                }
+        }
+    }
+
+    fun doApplyVacancy(vacancyId: String) {
+        viewModelScope.launch {
+            repository.applyVacancy(vacancyId)
+                .catch {
+                    _response.value = UiState.Error(it.message.toString())
+                }
+                .collect { result ->
+                    _response.value = UiState.Success(result)
                 }
         }
     }

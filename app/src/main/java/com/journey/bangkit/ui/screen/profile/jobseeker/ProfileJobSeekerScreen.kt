@@ -1,7 +1,5 @@
 package com.journey.bangkit.ui.screen.profile.jobseeker
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,9 +24,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -39,38 +39,37 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.journey.bangkit.ui.component.shimmerEffect
 import com.journey.bangkit.ui.component.skeleton.ProfileJobSeekerSkeleton
 import com.journey.bangkit.ui.theme.JourneyTheme
 import com.journey.bangkit.viewmodel.ProfileJobSeekerViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.journey.bangkit.R
-import com.journey.bangkit.data.model.User
-import com.journey.bangkit.data.source.JourneyDataSource
+import com.journey.bangkit.data.model.ProfileUser
 import com.journey.bangkit.ui.common.UiState
-import com.journey.bangkit.ui.common.ViewModelFactory
 import com.journey.bangkit.ui.theme.Blue40
 import com.journey.bangkit.ui.theme.Dark
 import com.journey.bangkit.ui.theme.DarkGray80
 import com.journey.bangkit.ui.theme.Light
 import com.journey.bangkit.ui.theme.Red
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileJobSeekerScreen(
-    viewModel: ProfileJobSeekerViewModel = viewModel(factory = ViewModelFactory())
+    viewModel: ProfileJobSeekerViewModel = hiltViewModel(),
+    navigateToLogin: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     var isLoading by remember { mutableStateOf(true) }
-    var data by remember { mutableStateOf(User()) }
+    var data by remember { mutableStateOf(ProfileUser()) }
 
     viewModel.user.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
             is UiState.Loading -> {
                 isLoading = true
-                Handler(Looper.getMainLooper()).postDelayed({
-                    viewModel.getUser()
-                }, 1500)
+                viewModel.getUser()
             }
             is UiState.Success -> {
                 data = uiState.data
@@ -85,7 +84,13 @@ fun ProfileJobSeekerScreen(
 
     ProfileJobSeekerContent(
         isLoading = isLoading,
-        data = data
+        data = data,
+        logout = {
+            scope.launch {
+                viewModel.logoutUser()
+                navigateToLogin()
+            }
+        }
     )
 }
 
@@ -93,7 +98,8 @@ fun ProfileJobSeekerScreen(
 fun ProfileJobSeekerContent(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
-    data: User
+    data: ProfileUser,
+    logout: () -> Unit
 ) {
     if (isLoading) {
         ProfileJobSeekerSkeleton(brush = shimmerEffect())
@@ -111,7 +117,10 @@ fun ProfileJobSeekerContent(
                 AsyncImage(
                     modifier = Modifier
                         .size(150.dp)
-                        .background(brush = shimmerEffect(), shape = CircleShape)
+                        .background(
+                            brush = Brush.verticalGradient(listOf(Light, Light)),
+                            shape = CircleShape
+                        )
                         .align(alignment = Alignment.CenterHorizontally),
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(data.profile_photo_url)
@@ -125,7 +134,7 @@ fun ProfileJobSeekerContent(
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = data.full_name,
+                        text = data.full_name.toString(),
                         textAlign = TextAlign.Center,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Medium,
@@ -133,7 +142,7 @@ fun ProfileJobSeekerContent(
                     )
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = data.email,
+                        text = data.email.toString(),
                         textAlign = TextAlign.Center,
                         color = Color.White
                     )
@@ -166,7 +175,7 @@ fun ProfileJobSeekerContent(
                             color = DarkGray80
                         )
                         Text(
-                            text = data.phone_number
+                            text = data.phone_number.toString()
                         )
                     }
                 }
@@ -198,7 +207,7 @@ fun ProfileJobSeekerContent(
                             color = DarkGray80
                         )
                         Text(
-                            text = data.disability_name
+                            text = data.disability_name.toString()
                         )
                     }
                 }
@@ -236,7 +245,7 @@ fun ProfileJobSeekerContent(
                                 modifier = modifier
                                     .background(color = Blue40, shape = CircleShape)
                                     .padding(horizontal = 12.dp, vertical = 2.dp),
-                                text = data.skill_one_name,
+                                text = data.skill_one_name.toString(),
                                 maxLines = 1,
                                 color = Light,
                                 overflow = TextOverflow.Ellipsis
@@ -245,7 +254,7 @@ fun ProfileJobSeekerContent(
                                 modifier = modifier
                                     .background(color = Blue40, shape = CircleShape)
                                     .padding(horizontal = 12.dp, vertical = 2.dp),
-                                text = data.skill_two_name,
+                                text = data.skill_two_name.toString(),
                                 maxLines = 1,
                                 color = Light,
                                 overflow = TextOverflow.Ellipsis
@@ -261,7 +270,7 @@ fun ProfileJobSeekerContent(
 
             TextButton(
                 modifier = modifier.fillMaxWidth(),
-                onClick = {}
+                onClick = { logout() }
             ) {
                 Row(
                     modifier = modifier
@@ -293,7 +302,8 @@ private fun ProfileJobSeekerPreview() {
     JourneyTheme {
         ProfileJobSeekerContent(
             isLoading = false,
-            data = JourneyDataSource.user
+            data = ProfileUser(),
+            logout = {}
         )
     }
 }

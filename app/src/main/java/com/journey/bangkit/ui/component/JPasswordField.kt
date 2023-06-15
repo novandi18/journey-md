@@ -35,15 +35,16 @@ import com.journey.bangkit.ui.theme.Light
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JPasswordField(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onKeyUp: (String) -> Unit,
+    textValue: String
 ) {
-    var text by remember { mutableStateOf("") }
     var isVisible by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
 
     BasicTextField(
-        value = text,
-        onValueChange = { newText -> text = newText },
+        value = textValue,
+        onValueChange = { newText -> onKeyUp(newText) },
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp),
@@ -53,7 +54,7 @@ fun JPasswordField(
         visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation()
     ) {
         OutlinedTextFieldDefaults.DecorationBox(
-            value = text,
+            value = textValue,
             innerTextField = { it() },
             enabled = true,
             singleLine = true,
@@ -102,6 +103,9 @@ fun JPasswordField(
 @Composable
 fun JPasswordFieldPreview() {
     JourneyTheme {
-        JPasswordField()
+        JPasswordField(
+            onKeyUp = {},
+            textValue = ""
+        )
     }
 }

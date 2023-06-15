@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -122,6 +123,9 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.5.1'
     kapt 'androidx.room:room-compiler:2.5.1'
     implementation 'androidx.room:room-paging:2.5.1'
+
+    // OkHttp
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3"
 
     // Test and debug
     testImplementation 'junit:junit:4.13.2'

@@ -6,15 +6,17 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.room.Room
 import com.journey.bangkit.data.local.JourneyDatabase
-import com.journey.bangkit.data.local.VacancyEntity
+import com.journey.bangkit.data.local.vacancy.VacancyEntity
 import com.journey.bangkit.data.api.JourneyApi
+import com.journey.bangkit.data.api.LoggingInterceptor
 import com.journey.bangkit.data.remote.JourneyRemoteMediator
-import com.journey.bangkit.viewmodel.VacancyCategory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
@@ -25,19 +27,28 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
+    fun provideLoggingInterceptor(): Interceptor = LoggingInterceptor()
+
+    @Provides
+    @Singleton
     fun provideJourneyDatabase(@ApplicationContext context: Context): JourneyDatabase {
         return Room.databaseBuilder(
             context,
             JourneyDatabase::class.java,
             "vacancies.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
     @Singleton
     fun provideJourneyApi(): JourneyApi {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(provideLoggingInterceptor())
+            .build()
+
         return Retrofit.Builder()
             .baseUrl(JourneyApi.BASE_URL)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create()
@@ -46,22 +57,19 @@ object AppModule {
     @OptIn(ExperimentalPagingApi::class)
     @Provides
     @Singleton
-    fun provideJourneyPager(db: JourneyDatabase, api: JourneyApi, category: VacancyCategory): Pager<Int, VacancyEntity> {
+    fun provideJourneyPager(db: JourneyDatabase, api: JourneyApi)
+    : Pager<Int, VacancyEntity> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10
             ),
             remoteMediator = JourneyRemoteMediator(
                 db = db,
-                api = api,
-                category = category.getCategory()
+                api = api
             ),
             pagingSourceFactory = {
                 db.vacancyDao.pagingSource()
             }
         )
     }
-
-    @Provides
-    fun provideVacancyCategory(): VacancyCategory = VacancyCategory()
 }

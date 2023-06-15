@@ -51,6 +51,7 @@
     <string name="phonenumber_placeholder">Masukan nomor telepon</string>
     <string name="password_placeholder">Masukan password</string>
     <string name="disability_placeholder">Pilih jenis disabilitas</string>
+    <string name="gender_placeholder">Pilih jenis kelamin</string>
     <string name="disability_job_placeholder">Pilih jenis disabilitas untuk lowongan ini</string>
     <string name="companyname_placeholder">Masukan nama perusahaan</string>
     <string name="province_placeholder">Pilih provinsi</string>
@@ -86,6 +87,7 @@
     <string name="logout">Keluar Akun</string>
     <string name="submit" translatable="false">Submit</string>
     <string name="apply">Lamar</string>
+    <string name="continue_register">Lanjutkan</string>
 
     <!--  Menu  -->
     <string name="menu" translatable="false">Menu</string>
@@ -101,4 +103,9 @@
     <string name="apply_before">Lamar sebelum</string>
     <string name="vacancy_apply">Lowongan ini untuk</string>
     <string name="skill_requiremnt">Syarat Kemampuan</string>
+    <string name="man">Laki-laki</string>
+    <string name="woman">Perempuan</string>
+    <string name="job_apply_empty">Tidak ada lowongan yang dilamar</string>
+    <string name="vacancy_empty">Tidak ada lowongan</string>
+    <string name="applied_at">Dilamar pada</string>
 </resources>

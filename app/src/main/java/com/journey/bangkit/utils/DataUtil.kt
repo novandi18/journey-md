@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken
 import com.journey.bangkit.data.model.City
 import com.journey.bangkit.data.model.Province
 import com.journey.bangkit.data.model.Sector
+import com.journey.bangkit.data.model.Skill
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.ZonedDateTime
@@ -45,6 +46,14 @@ fun getSector(context: Context): List<Sector> {
     val listSector = object : TypeToken<List<Sector>>() {}.type
 
     return gson.fromJson(sector, listSector)
+}
+
+fun getSkills(context: Context): List<Skill> {
+    val skills = getJsonDataFromAsset(context, "skills.json")
+    val gson = Gson()
+    val listSkills = object : TypeToken<List<Skill>>() {}.type
+
+    return gson.fromJson(skills, listSkills)
 }
 
 fun convertMillisToDate(milliseconds: Long): String {

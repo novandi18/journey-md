@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apartment
 import androidx.compose.material.icons.filled.Email
@@ -20,7 +22,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -34,10 +38,13 @@ import com.journey.bangkit.R
 import com.journey.bangkit.data.model.City
 import com.journey.bangkit.data.model.Province
 import com.journey.bangkit.data.model.Sector
+import com.journey.bangkit.data.model.UserJobProvider
 import com.journey.bangkit.ui.component.JDropdownMenu
+import com.journey.bangkit.ui.component.JPasswordField
 import com.journey.bangkit.ui.component.JTextField
 import com.journey.bangkit.ui.theme.Blue40
 import com.journey.bangkit.ui.theme.JourneyTheme
+import com.journey.bangkit.ui.theme.Light
 
 @Composable
 fun RegisterJobProviderForm(
@@ -45,15 +52,22 @@ fun RegisterJobProviderForm(
     province: List<Province>,
     city: List<City>,
     sector: List<Sector>,
-    onProvinceChange: (Int) -> Unit
+    onProvinceChange: (Int) -> Unit,
+    doRegister: (UserJobProvider) -> Unit,
+    isLoading: Boolean = false
 ) {
     val provinceData = province.map { it.nama }
     val cityData = city.map { it.nama }
     val sectorData = sector.map { it.name }
 
-    var provinceSelected by rememberSaveable { mutableStateOf(0) }
-    var citySelected by rememberSaveable { mutableStateOf(0) }
-    var sectorSelected by rememberSaveable { mutableStateOf(0) }
+    var provinceSelected by rememberSaveable { mutableIntStateOf(0) }
+    var citySelected by rememberSaveable { mutableIntStateOf(0) }
+    var sectorSelected by rememberSaveable { mutableIntStateOf(0) }
+    var companyName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+    var employees by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier.padding(horizontal = 24.dp),
@@ -64,15 +78,20 @@ fun RegisterJobProviderForm(
             leadingIcon = Icons.Filled.Apartment,
             label = stringResource(id = R.string.company_name),
             keyboardType = KeyboardType.Text,
-            placeholder = stringResource(id = R.string.companyname_placeholder)
+            placeholder = stringResource(id = R.string.companyname_placeholder),
+            onKeyUp = { companyName = it },
+            textValue = companyName
         )
         JTextField(
             modifier = modifier,
             leadingIcon = Icons.Filled.Email,
             label = stringResource(id = R.string.email),
             keyboardType = KeyboardType.Email,
-            placeholder = stringResource(id = R.string.email_placeholder)
+            placeholder = stringResource(id = R.string.email_placeholder),
+            onKeyUp = { email = it },
+            textValue = email
         )
+        JPasswordField(onKeyUp = { password = it }, textValue = password)
         JDropdownMenu(
             label = stringResource(id = R.string.sector_placeholder),
             icon = Icons.Filled.Factory,
@@ -87,14 +106,18 @@ fun RegisterJobProviderForm(
             leadingIcon = Icons.Filled.MapsHomeWork,
             label = stringResource(id = R.string.address),
             keyboardType = KeyboardType.Text,
-            placeholder = stringResource(id = R.string.address_placeholder)
+            placeholder = stringResource(id = R.string.address_placeholder),
+            onKeyUp = { address = it },
+            textValue = address
         )
         JTextField(
             modifier = modifier,
             leadingIcon = Icons.Filled.Groups,
             label = stringResource(id = R.string.total_employee),
             keyboardType = KeyboardType.Text,
-            placeholder = stringResource(id = R.string.totalemployee_placeholder)
+            placeholder = stringResource(id = R.string.totalemployee_placeholder),
+            onKeyUp = { employees = it },
+            textValue = employees
         )
         JDropdownMenu(
             label = stringResource(id = R.string.province_placeholder),
@@ -120,12 +143,34 @@ fun RegisterJobProviderForm(
             modifier = modifier.padding(vertical = 56.dp, horizontal = 24.dp)
         ) {
             Button(
-                onClick = {},
+                onClick = {
+                    doRegister(
+                        UserJobProvider(
+                            name = companyName,
+                            address = address,
+                            email = email,
+                            password = password,
+                            city = cityData[citySelected],
+                            province = provinceData[provinceSelected],
+                            employees = employees.toInt(),
+                            id_sector = sectorSelected
+                        )
+                    )
+                },
                 modifier = modifier
                     .background(color = Blue40, shape = CircleShape)
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .height(56.dp),
+                enabled = (email.isNotEmpty() && password.isNotEmpty() &&
+                        companyName.isNotEmpty() && address.isNotEmpty() &&
+                        employees.isNotEmpty()) || isLoading
             ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = modifier.size(28.dp).padding(end = 8.dp),
+                        color = Light
+                    )
+                }
                 Text(
                     text = stringResource(id = R.string.btn_register),
                     color = Color.White,
@@ -144,7 +189,9 @@ fun RegisterJobProviderFormPreview() {
             province = listOf(),
             city = listOf(),
             sector = listOf(),
-            onProvinceChange = {}
+            onProvinceChange = {},
+            doRegister = {},
+            isLoading = true
         )
     }
 }

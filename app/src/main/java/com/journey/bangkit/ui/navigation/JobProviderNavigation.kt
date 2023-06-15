@@ -60,7 +60,15 @@ fun NavGraphBuilder.jobProviderGraph(navController: NavController, setBottomBarS
                 }
             }
         ) {
-            ProfileJobProviderScreen()
+            ProfileJobProviderScreen(
+                navigateToLogin = {
+                    navController.navigate(AuthNavigation.AUTH_ROUTE) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
         composable(Screen.AddVacancy.route,
             enterTransition = {

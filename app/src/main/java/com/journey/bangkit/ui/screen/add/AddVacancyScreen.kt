@@ -65,6 +65,7 @@ fun AddVacancyContent(
     var skillTwoSelected by rememberSaveable { mutableIntStateOf(0) }
     var deadline by remember { mutableStateOf("") }
     val disabilities = DisabilityDataSource.disabilities.map { it.name }
+    var position by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -105,7 +106,9 @@ fun AddVacancyContent(
                     JTextField(
                         leadingIcon = Icons.Filled.Work,
                         label = stringResource(id = R.string.placement_address_placeholder),
-                        placeholder = stringResource(id = R.string.placement_address_placeholder)
+                        placeholder = stringResource(id = R.string.placement_address_placeholder),
+                        onKeyUp = { position = it },
+                        textValue = position
                     )
                     JTextFieldArea(
                         title = stringResource(id = R.string.description_placeholder)
