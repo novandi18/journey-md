@@ -9,11 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.journey.bangkit.data.source.JourneyDataSource
 import com.journey.bangkit.ui.component.BottomBar
-import com.journey.bangkit.ui.navigation.AuthNavigation
-import com.journey.bangkit.ui.navigation.IntroNavigation
-import com.journey.bangkit.ui.navigation.JobSeekerNavigation
 import com.journey.bangkit.ui.navigation.NavigationItem
 import com.journey.bangkit.ui.navigation.Screen
 import com.journey.bangkit.ui.navigation.authGraph

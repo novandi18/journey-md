@@ -49,7 +49,15 @@ fun NavGraphBuilder.jobSeekerGraph(navController: NavController, setBottomBarSta
                 }
             }
         ) {
-            ProfileJobSeekerScreen()
+            ProfileJobSeekerScreen(
+                navigateToLogin = {
+                    navController.navigate(AuthNavigation.AUTH_ROUTE) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
         composable(Screen.JobApply.route,
             enterTransition = {

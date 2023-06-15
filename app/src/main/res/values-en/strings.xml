@@ -84,4 +84,7 @@
     <string name="gender_placeholder">Choose gender</string>
     <string name="man">Man</string>
     <string name="woman">Woman</string>
+    <string name="job_apply_empty">No job apply data</string>
+    <string name="vacancy_empty">No vacancy data</string>
+    <string name="applied_at">Applied at</string>
 </resources>

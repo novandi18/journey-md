@@ -12,20 +12,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeJobSeekerViewModel @Inject
-constructor(repository: HomeJobSeekerRepository, private val category: VacancyCategory) : ViewModel() {
+constructor(private val repository: HomeJobSeekerRepository) : ViewModel() {
     val vacancies: Flow<PagingData<Vacancy>> = repository.getAllVacancies().cachedIn(viewModelScope)
 
-    fun setVacancyCategory(categorySelected: Int = 0) {
-        category.setCategory(categorySelected)
+    suspend fun setVacancyCategory(page: Int) {
+        repository.switchPage(page)
     }
-}
-
-class VacancyCategory @Inject constructor() {
-    private var category: Int = 0
-
-    fun setCategory(categorySelected: Int) {
-        category = categorySelected
-    }
-
-    fun getCategory(): Int = category
 }

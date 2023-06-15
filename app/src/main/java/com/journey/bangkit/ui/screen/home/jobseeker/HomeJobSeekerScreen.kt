@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,6 +43,7 @@ import com.journey.bangkit.ui.component.CardSkeleton
 import com.journey.bangkit.ui.component.JCard
 import com.journey.bangkit.ui.component.shimmerEffect
 import com.journey.bangkit.utils.toDate
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeJobSeekerScreen(
@@ -53,15 +55,14 @@ fun HomeJobSeekerScreen(
     val jobTypes = JourneyDataSource.jobTypes
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
+    var categorySelected by remember { mutableIntStateOf(1) }
     val categories = JourneyDataSource.navigationCategory
-    var categorySelected by remember { mutableIntStateOf(0) }
-    val vacancies = viewModel.vacancies.collectAsLazyPagingItems()
     val context = LocalContext.current
+    val vacancies = viewModel.vacancies.collectAsLazyPagingItems()
+    val scope = rememberCoroutineScope()
 
-    LaunchedEffect(key1 = vacancies.loadState) {
-        if (vacancies.loadState.refresh is LoadState.Error) {
-            Toast.makeText(context, "Error: ${ vacancies.loadState.refresh as LoadState.Error }", Toast.LENGTH_SHORT).show()
-        }
+    LaunchedEffect(categorySelected) {
+        Toast.makeText(context, categorySelected.toString(), Toast.LENGTH_SHORT).show()
     }
 
     Column(
@@ -89,16 +90,18 @@ fun HomeJobSeekerScreen(
                 categories.forEachIndexed { index, category ->
                     TextButton(
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (index == categorySelected) Color.White else Color.White.copy(.2f)
+                            containerColor = if (index + 1 == categorySelected) Color.White else Color.White.copy(.2f)
                         ),
                         onClick = {
-                            viewModel.setVacancyCategory(index)
-                            categorySelected = index
+                            categorySelected = index + 1
+                            scope.launch {
+                                viewModel.setVacancyCategory(index + 1)
+                            }
                         },
                     ) {
                         Text(
                             text = stringResource(id = category),
-                            color = if (index == categorySelected) Blue40 else Color.White
+                            color = if (index + 1 == categorySelected) Blue40 else Color.White
                         )
                     }
                 }

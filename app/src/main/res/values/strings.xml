@@ -105,4 +105,7 @@
     <string name="skill_requiremnt">Syarat Kemampuan</string>
     <string name="man">Laki-laki</string>
     <string name="woman">Perempuan</string>
+    <string name="job_apply_empty">Tidak ada lowongan yang dilamar</string>
+    <string name="vacancy_empty">Tidak ada lowongan</string>
+    <string name="applied_at">Dilamar pada</string>
 </resources>

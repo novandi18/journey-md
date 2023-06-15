@@ -2,7 +2,6 @@ package com.journey.bangkit.data.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.io.Serializable
 
 data class User(
     val id: String = "",
@@ -47,4 +46,9 @@ data class UserRegisterResponse(
     val message: String,
     val status: String? = null,
     val id: String? = null
+)
+
+data class ApiErrorResponse(
+    val status: String = "",
+    val message: String = ""
 )

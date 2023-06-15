@@ -1,6 +1,5 @@
 package com.journey.bangkit.ui.screen.login.jobseeker
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,10 +25,7 @@ import com.journey.bangkit.ui.component.auth.login.LoginBottom
 import com.journey.bangkit.ui.component.auth.login.LoginForm
 import com.journey.bangkit.ui.theme.JourneyTheme
 import com.journey.bangkit.viewmodel.LoginJobSeekerViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.journey.bangkit.data.model.LoginJobSeekerResponse
 import com.journey.bangkit.ui.common.UiState
-import com.journey.bangkit.ui.common.ViewModelFactory
 
 @Composable
 fun LoginJobSeekerScreen(
@@ -58,8 +54,11 @@ fun LoginJobSeekerScreen(
                 is UiState.Loading -> {}
                 is UiState.Success -> {
                     isLoading = false
-                    navigateToHome()
-                    Toast.makeText(context, response.data.status, Toast.LENGTH_SHORT).show()
+                    if (response.data.errorMessage != null) {
+                        Toast.makeText(context, response.data.errorMessage, Toast.LENGTH_SHORT).show()
+                    } else {
+                        navigateToHome()
+                    }
                 }
                 is UiState.Error -> {
                     isLoading = false

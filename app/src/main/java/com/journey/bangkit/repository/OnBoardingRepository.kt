@@ -2,6 +2,7 @@ package com.journey.bangkit.repository
 
 import com.journey.bangkit.data.local.JourneyDatabase
 import com.journey.bangkit.data.local.auth.AuthEntity
+import com.journey.bangkit.data.local.page.PageEntity
 import javax.inject.Inject
 
 class OnBoardingRepository @Inject constructor(
@@ -9,6 +10,7 @@ class OnBoardingRepository @Inject constructor(
 ) {
     suspend fun upsertAll() {
         db.authDao.upsertAllAuth(AuthEntity())
+        db.pageDao.setInitialPage(PageEntity())
     }
 
     suspend fun getAll(): AuthEntity = db.authDao.getOnBoardingAndAuth()
