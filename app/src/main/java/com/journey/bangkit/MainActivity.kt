@@ -3,7 +3,6 @@ package com.journey.bangkit
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -18,17 +17,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.journey.bangkit.data.source.JourneyDataSource
-import com.journey.bangkit.data.store.JourneyDataStore
 import com.journey.bangkit.ui.navigation.AuthNavigation
 import com.journey.bangkit.ui.navigation.IntroNavigation
 import com.journey.bangkit.ui.navigation.JobProviderNavigation
 import com.journey.bangkit.ui.navigation.JobSeekerNavigation
-import com.journey.bangkit.ui.navigation.NavigationItem
 import com.journey.bangkit.ui.theme.JourneyTheme
 import com.journey.bangkit.viewmodel.OnBoardingViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint

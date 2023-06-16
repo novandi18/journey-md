@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -30,16 +29,14 @@ import com.journey.bangkit.ui.theme.Light
 import com.journey.bangkit.ui.theme.Red
 
 @Composable
-fun JCardApply(
+fun JCardApplicant(
     position: String,
     company: String,
     skill_one: String,
     skill_two: String,
     disability: String,
     appliedAt: String,
-    status: String,
-    onClick: (String) -> Unit,
-    id: String
+    status: String
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -128,7 +125,7 @@ fun JCardApply(
                 .padding(bottom = 16.dp, top = 8.dp, start = 16.dp, end = 16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Button(
+            Text(
                 modifier = Modifier
                     .background(
                         color = when (status) {
@@ -138,28 +135,26 @@ fun JCardApply(
                         }, shape = CircleShape
                     )
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                onClick = { onClick(id) }
-            ) {
-                Text(text = "Accept")
-            }
+                text = status,
+                fontWeight = FontWeight.Medium,
+                color = Light
+            )
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun JCardApplyPreview() {
+fun JCardApplicantPreview() {
     JourneyTheme {
-        JCardApply(
+        JCardApplicant(
             "Web Developer",
             "PT Juhdi Sakti Engineering",
             "PHP",
             "JavaScript",
             "Mobility Impairment",
             "16 Agustus 2023",
-            "Accepted",
-            onClick = {},
-            id = ""
+            "Accepted"
         )
     }
 }

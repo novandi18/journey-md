@@ -45,7 +45,7 @@ data class UserJobProvider(
 data class UserRegisterResponse(
     val message: String,
     val status: String? = null,
-    val id: String? = null
+    val id: String? = null,
 )
 
 data class ApiErrorResponse(

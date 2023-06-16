@@ -28,9 +28,10 @@ import com.journey.bangkit.ui.theme.Light
 @Composable
 fun JTextFieldArea(
     modifier: Modifier = Modifier,
-    title: String
+    title: String,
+    onKeyUp: (String) -> Unit,
+    value: String
 ) {
-    var text by remember { mutableStateOf("") }
     val interactionSource = remember { MutableInteractionSource() }
 
     Column(
@@ -39,8 +40,8 @@ fun JTextFieldArea(
         Text(text = title)
         
         BasicTextField(
-            value = text,
-            onValueChange = { newText -> text = newText },
+            value = value,
+            onValueChange = { newText -> onKeyUp(newText) },
             modifier = modifier.fillMaxWidth(),
             singleLine = false,
             interactionSource = interactionSource,
@@ -49,7 +50,7 @@ fun JTextFieldArea(
             maxLines = 7
         ) {
             OutlinedTextFieldDefaults.DecorationBox(
-                value = text,
+                value = value,
                 innerTextField = { it() },
                 enabled = true,
                 singleLine = true,
@@ -81,6 +82,6 @@ fun JTextFieldArea(
 @Composable
 fun JTextFieldAreaPreview() {
     JourneyTheme {
-        JTextFieldArea(title = "Deskripsi")
+        JTextFieldArea(title = "Deskripsi", onKeyUp = {}, value = "")
     }
 }

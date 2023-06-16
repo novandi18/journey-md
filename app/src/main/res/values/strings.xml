@@ -68,6 +68,7 @@
     <string name="deadline_time_placeholder">Batas waktu</string>
     <string name="skill_one_placeholder">Skill pertama yang dibutuhkan untuk lowongan ini</string>
     <string name="skill_two_placeholder">Skill kedua yang dibutuhkan untuk lowongan ini</string>
+    <string name="job_type_placeholder">Jenis pekerjaan</string>
 
     <!--  Title  -->
     <string name="vacancy">Lowongan</string>

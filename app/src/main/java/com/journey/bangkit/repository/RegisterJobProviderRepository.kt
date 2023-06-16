@@ -1,8 +1,12 @@
 package com.journey.bangkit.repository
 
 import android.content.Context
+import com.google.gson.Gson
+import com.journey.bangkit.data.api.ApiException
 import com.journey.bangkit.data.api.JourneyApi
+import com.journey.bangkit.data.model.ApiErrorResponse
 import com.journey.bangkit.data.model.City
+import com.journey.bangkit.data.model.LoginJobProviderResponse
 import com.journey.bangkit.data.model.Province
 import com.journey.bangkit.data.model.Sector
 import com.journey.bangkit.data.model.UserJobProvider
@@ -27,8 +31,13 @@ class RegisterJobProviderRepository @Inject constructor(
     }
 
     suspend fun doRegister(data: UserJobProvider): Flow<UserRegisterResponse> {
-        return flowOf(
-            api.registerJobProvider(data)
-        )
+        return try {
+            flowOf(
+                api.registerJobProvider(data)
+            )
+        } catch (e: ApiException) {
+            val errorResponse = Gson().fromJson(e.message, ApiErrorResponse::class.java)
+            flowOf(UserRegisterResponse(message = errorResponse.message))
+        }
     }
 }

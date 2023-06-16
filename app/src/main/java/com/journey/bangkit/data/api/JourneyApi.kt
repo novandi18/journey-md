@@ -1,5 +1,10 @@
 package com.journey.bangkit.data.api
 
+import com.journey.bangkit.data.model.AddVacancy
+import com.journey.bangkit.data.model.AddVacancyResponse
+import com.journey.bangkit.data.model.AllVacancyResponse
+import com.journey.bangkit.data.model.Applicants
+import com.journey.bangkit.data.model.ApplicantsResponse
 import com.journey.bangkit.data.model.LoginJobProviderResponse
 import com.journey.bangkit.data.model.LoginJobSeekerResponse
 import com.journey.bangkit.data.model.LoginRequest
@@ -88,6 +93,42 @@ interface JourneyApi {
         @Header("Authorization") token: String,
         @Path("userId") userId: String
     ) : UserApplyStatusResponse
+
+    @GET("companies/{companyId}/vacancies")
+    suspend fun getCompanyVacancies(
+        @Header("Authorization") token: String,
+        @Path("companyId") companyId: String,
+    ) : VacancyResponse
+
+    @POST("companies/{companyId}/vacancies")
+    suspend fun addVacancy(
+        @Header("Authorization") token: String,
+        @Path("companyId") companyId: String,
+        @Body vacancyRequest: AddVacancy
+    ) : AddVacancyResponse
+
+    @GET("vacancies/all-vacancies")
+    suspend fun getAllVacancyWithoutPager() : AllVacancyResponse
+
+    @GET("companies/{companyId}/vacancies/{vacancyId}/applicants")
+    suspend fun getApplicants(
+        @Header("Authorization") token: String,
+        @Path("companyId") companyId: String
+    ) : List<Applicants>
+
+    @POST("{companyId}/vacancies/{vacancyId}/applicants/{applicantsId}/accept")
+    suspend fun postAcceptApplicants(
+        @Header("Authorization") token: String,
+        @Path("companyId") companyId: String,
+        @Path("applicantsId") applicantsId: String,
+    ) : ApplicantsResponse
+
+    @POST("{companyId}/vacancies/{vacancyId}/applicants/{applicantsId}/reject")
+    suspend fun postRejectApplicants(
+        @Header("Authorization") token: String,
+        @Path("companyId") companyId: String,
+        @Path("applicantsId") applicantsId: String
+    ) : ApplicantsResponse
 
     companion object {
         const val BASE_URL = "https://journey-pchfpsfuwq-et.a.run.app/api/"

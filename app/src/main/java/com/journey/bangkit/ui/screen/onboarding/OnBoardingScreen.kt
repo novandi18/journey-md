@@ -39,8 +39,6 @@ import com.journey.bangkit.data.source.OnBoardingDataSource
 import com.journey.bangkit.ui.theme.Blue40
 import com.journey.bangkit.ui.theme.JourneyTheme
 import kotlinx.coroutines.launch
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.journey.bangkit.ui.common.ViewModelFactory
 import com.journey.bangkit.ui.component.onboarding.OnBoardingContent
 import com.journey.bangkit.ui.theme.Dark
 import com.journey.bangkit.viewmodel.OnBoardingViewModel

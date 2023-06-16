@@ -61,5 +61,4 @@ fun convertMillisToDate(milliseconds: Long): String {
     return dateFormatter.format(milliseconds)
 }
 
-fun String.toDate(): String = ZonedDateTime.parse(this)
-    .format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
+fun String.toDate(): String = this
