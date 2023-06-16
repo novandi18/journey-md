@@ -55,7 +55,7 @@ object JourneyDataSource {
     )
 
     val navigationCategory = listOf(
-        R.string.recommended_for_you, R.string.most_popular, R.string.newest, R.string.all
+        R.string.all, R.string.most_popular, R.string.newest, R.string.recommended_for_you
     )
 
     val user = User(

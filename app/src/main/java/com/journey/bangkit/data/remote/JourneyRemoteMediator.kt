@@ -1,5 +1,6 @@
 package com.journey.bangkit.data.remote
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -36,26 +37,30 @@ class JourneyRemoteMediator(
                 }
             }
 
-            val vacancies = when (currentPage.pageType) {
-                1 -> api.getVacancies(page = loadKey)
-                2 -> api.getPopularVacancies(page = loadKey)
-                3 -> api.getLatestVacancies(page = loadKey)
-                else -> api.getVacancies(page = loadKey)
-            }
-
-            // val vacancies = api.getVacancies(page = loadKey)
-
-            db.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    db.vacancyDao.clearAll()
+            if (currentPage.pageType != 4) {
+                val vacancies = when (currentPage.pageType) {
+                    1 -> api.getVacancies(page = loadKey)
+                    2 -> api.getPopularVacancies(page = loadKey)
+                    3 -> api.getLatestVacancies(page = loadKey)
+                    else -> api.getVacancies(page = loadKey)
                 }
-                val vacancyEntities = vacancies.vacancies.map { it.toVacancyEntity() }
-                db.vacancyDao.upsertAll(vacancyEntities)
-            }
 
-            MediatorResult.Success(
-                endOfPaginationReached = vacancies.vacancies.isEmpty()
-            )
+                db.withTransaction {
+                    if (loadType == LoadType.REFRESH) {
+                        db.vacancyDao.clearAll()
+                    }
+                    val vacancyEntities = vacancies.vacancies.map { it.toVacancyEntity() }
+                    db.vacancyDao.upsertAll(vacancyEntities)
+                }
+
+                MediatorResult.Success(
+                    endOfPaginationReached = vacancies.vacancies.isEmpty()
+                )
+            } else {
+                MediatorResult.Success(
+                    endOfPaginationReached = true
+                )
+            }
         } catch (e: IOException) {
             MediatorResult.Error(e)
         } catch (e: HttpException) {

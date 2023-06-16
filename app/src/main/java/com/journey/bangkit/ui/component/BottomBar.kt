@@ -46,7 +46,7 @@ fun BottomBar(
                 .shadow(elevation = 16.dp),
             containerColor = Light
         ) {
-            JourneyDataSource.navItemsJobSeeker.map { item ->
+            navigationItems.map { item ->
                 NavigationBarItem(
                     icon = {
                         Icon(

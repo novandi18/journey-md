@@ -1,6 +1,7 @@
 package com.journey.bangkit.ui.screen.home.jobseeker
 
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +41,9 @@ import com.journey.bangkit.ui.theme.JourneyTheme
 import com.journey.bangkit.viewmodel.HomeJobSeekerViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.journey.bangkit.data.model.AllVacancy
+import com.journey.bangkit.data.model.Vacancy
+import com.journey.bangkit.ui.common.UiState
 import com.journey.bangkit.ui.component.CardSkeleton
 import com.journey.bangkit.ui.component.JCard
 import com.journey.bangkit.ui.component.shimmerEffect
@@ -57,12 +62,30 @@ fun HomeJobSeekerScreen(
     var isSearchActive by remember { mutableStateOf(false) }
     var categorySelected by remember { mutableIntStateOf(1) }
     val categories = JourneyDataSource.navigationCategory
-    val context = LocalContext.current
-    val vacancies = viewModel.vacancies.collectAsLazyPagingItems()
     val scope = rememberCoroutineScope()
+    var data by remember { mutableStateOf(listOf<AllVacancy>()) }
+    val recommended by viewModel.predict.collectAsState(initial = UiState.Loading)
+    val vacancies = viewModel.vacancies.collectAsLazyPagingItems()
 
     LaunchedEffect(categorySelected) {
-        Toast.makeText(context, categorySelected.toString(), Toast.LENGTH_SHORT).show()
+        if (categorySelected != 4) {
+            data = listOf()
+            vacancies.refresh()
+        } else {
+            recommended.let { response ->
+                when (response) {
+                    is UiState.Loading -> viewModel.getPredict()
+                    is UiState.Success -> {
+                        Log.d("cek1", response.data.first.toString())
+                        val dataFiltered = response.data.second.filter { x ->
+                            x.placement_address in response.data.first
+                        }
+                        data = dataFiltered.ifEmpty { response.data.second }
+                    }
+                    is UiState.Error -> {}
+                }
+            }
+        }
     }
 
     Column(
@@ -108,48 +131,73 @@ fun HomeJobSeekerScreen(
             }
         }
 
-        if (vacancies.loadState.refresh == LoadState.Loading) {
-            Column(
-                modifier = modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                repeat(5) {
-                    CardSkeleton(brush = shimmerEffect())
-                }
-            }
-        } else {
+        if (data.isNotEmpty() || categorySelected == 4) {
             LazyColumn(
                 modifier = modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(count = vacancies.itemCount) { index ->
-                    val vacancy = vacancies[index]
-                    if (vacancy != null) {
-                        JCard(
-                            title = vacancy.placement_address,
-                            imageUrl = vacancy.company_logo,
-                            jobType = jobTypes[vacancy.job_type - 1],
-                            disabilityType = vacancy.disability_name,
-                            skill_one = vacancy.skill_one_name,
-                            skill_two = vacancy.skill_two_name,
-                            deadline = vacancy.deadline_time.toDate(),
-                            description = vacancy.description,
-                            setClick = navigateToDetail,
-                            id = vacancy.id
-                        )
+                items(count = data.size) { index ->
+                    val vacancy = data[index]
+                    JCard(
+                        title = vacancy.placement_address,
+                        imageUrl = vacancy.company_logo,
+                        jobType = jobTypes[vacancy.job_type - 1],
+                        disabilityType = vacancy.disability_name,
+                        skill_one = vacancy.skill_one_name,
+                        skill_two = vacancy.skill_two_name,
+                        deadline = vacancy.deadline_time.toDate(),
+                        description = vacancy.description,
+                        setClick = navigateToDetail,
+                        id = vacancy.id
+                    )
+                }
+            }
+        } else {
+            if (vacancies.loadState.refresh == LoadState.Loading) {
+                Column(
+                    modifier = modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    repeat(5) {
+                        CardSkeleton(brush = shimmerEffect())
                     }
                 }
+            } else {
+                LazyColumn(
+                    modifier = modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(count = vacancies.itemCount) { index ->
+                        val vacancy = vacancies[index]
+                        if (vacancy != null && vacancy.job_type <= 3) {
+                            JCard(
+                                title = vacancy.placement_address,
+                                imageUrl = vacancy.company_logo,
+                                jobType = jobTypes[vacancy.job_type - 1],
+                                disabilityType = vacancy.disability_name,
+                                skill_one = vacancy.skill_one_name,
+                                skill_two = vacancy.skill_two_name,
+                                deadline = vacancy.deadline_time.toDate(),
+                                description = vacancy.description,
+                                setClick = navigateToDetail,
+                                id = vacancy.id
+                            )
+                        }
+                    }
 
-                item {
-                    if (vacancies.loadState.append is LoadState.Loading) {
-                        repeat(5) {
-                            CardSkeleton(brush = shimmerEffect())
+                    item {
+                        if (vacancies.loadState.append is LoadState.Loading) {
+                            repeat(5) {
+                                CardSkeleton(brush = shimmerEffect())
+                            }
                         }
                     }
                 }
             }
         }
+
     }
 }
 

@@ -1,5 +1,6 @@
 package com.journey.bangkit.ui.screen.add
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +12,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.AssistWalker
-import androidx.compose.material.icons.filled.HotelClass
+import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,12 +31,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.journey.bangkit.R
+import com.journey.bangkit.data.model.AddVacancy
+import com.journey.bangkit.data.model.City
+import com.journey.bangkit.data.model.Province
+import com.journey.bangkit.data.model.Sector
+import com.journey.bangkit.data.model.Skill
 import com.journey.bangkit.data.source.DisabilityDataSource
+import com.journey.bangkit.data.source.JourneyDataSource
+import com.journey.bangkit.ui.common.UiState
 import com.journey.bangkit.ui.component.JDatePicker
 import com.journey.bangkit.ui.component.JDropdownMenu
 import com.journey.bangkit.ui.component.JTextField
@@ -41,6 +53,11 @@ import com.journey.bangkit.ui.component.JTextFieldArea
 import com.journey.bangkit.ui.theme.Blue40
 import com.journey.bangkit.ui.theme.JourneyTheme
 import com.journey.bangkit.ui.theme.Light
+import com.journey.bangkit.viewmodel.AddVacancyViewModel
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun AddVacancyScreen(
@@ -58,14 +75,50 @@ fun AddVacancyScreen(
 fun AddVacancyContent(
     modifier: Modifier = Modifier,
     isPreviousBack: NavBackStackEntry?,
-    doBack: () -> Unit
+    doBack: () -> Unit,
+    viewModel: AddVacancyViewModel = hiltViewModel()
 ) {
+    val disabilities = DisabilityDataSource.disabilities.map { it.name }
+    val jobTypes = JourneyDataSource.jobTypes
+    var skillData by rememberSaveable { mutableStateOf(listOf<String>()) }
     var disabilitySelected by rememberSaveable { mutableIntStateOf(0) }
+    var jobTypeSelected by rememberSaveable { mutableIntStateOf(0) }
     var skillOneSelected by rememberSaveable { mutableIntStateOf(0) }
     var skillTwoSelected by rememberSaveable { mutableIntStateOf(0) }
     var deadline by remember { mutableStateOf("") }
-    val disabilities = DisabilityDataSource.disabilities.map { it.name }
     var position by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    viewModel.skills.collectAsState(initial = UiState.Loading).value.let { uiState ->
+        when (uiState) {
+            is UiState.Loading -> {
+                viewModel.getSkills(context)
+            }
+
+            is UiState.Error -> {}
+            is UiState.Success -> {
+                val data = uiState.data
+                skillData = data.map { it.name }
+            }
+        }
+    }
+
+    val addResponse by viewModel.response.collectAsState(initial = UiState.Loading)
+    LaunchedEffect(addResponse) {
+        addResponse.let { response ->
+            when (response) {
+                is UiState.Loading -> {}
+                is UiState.Success -> {
+                    Toast.makeText(context, response.data.message, Toast.LENGTH_SHORT).show()
+                    doBack()
+                }
+                is UiState.Error -> {
+                    Toast.makeText(context, response.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -111,7 +164,18 @@ fun AddVacancyContent(
                         textValue = position
                     )
                     JTextFieldArea(
-                        title = stringResource(id = R.string.description_placeholder)
+                        title = stringResource(id = R.string.description_placeholder),
+                        onKeyUp = { description = it },
+                        value = description
+                    )
+                    JDropdownMenu(
+                        label = stringResource(id = R.string.job_type_placeholder),
+                        icon = Icons.Filled.Work,
+                        data = jobTypes,
+                        setItemSelected = {
+                            jobTypeSelected = it
+                        },
+                        itemSelected = jobTypeSelected
                     )
                     JDropdownMenu(
                         label = stringResource(id = R.string.disability_job_placeholder),
@@ -124,8 +188,8 @@ fun AddVacancyContent(
                     )
                     JDropdownMenu(
                         label = stringResource(id = R.string.skill_one_placeholder),
-                        icon = Icons.Filled.HotelClass,
-                        data = disabilities,
+                        icon = Icons.Filled.StarHalf,
+                        data = skillData,
                         setItemSelected = {
                             skillOneSelected = it
                         },
@@ -133,8 +197,8 @@ fun AddVacancyContent(
                     )
                     JDropdownMenu(
                         label = stringResource(id = R.string.skill_two_placeholder),
-                        icon = Icons.Filled.HotelClass,
-                        data = disabilities,
+                        icon = Icons.Filled.StarHalf,
+                        data = skillData,
                         setItemSelected = {
                             skillTwoSelected = it
                         },
@@ -149,9 +213,22 @@ fun AddVacancyContent(
                 }
 
                 Button(
-                    modifier = modifier.fillMaxWidth()
+                    modifier = modifier
+                        .fillMaxWidth()
                         .height(56.dp),
-                    onClick = {}
+                    onClick = {
+                        viewModel.addVacancy(
+                            data = AddVacancy(
+                                placement_address = position,
+                                description = description,
+                                id_disability = disabilitySelected + 1,
+                                skill_one = (skillOneSelected + 1).toString(),
+                                skill_two = (skillTwoSelected + 1).toString(),
+                                job_type = jobTypeSelected + 1,
+                                deadline_time = deadline
+                            )
+                        )
+                    }
                 ) {
                     Text(text = stringResource(id = R.string.submit))
                 }

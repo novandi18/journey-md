@@ -4,10 +4,12 @@ import android.content.Context
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.RemoteMediator
 import androidx.room.Room
 import com.journey.bangkit.data.local.JourneyDatabase
 import com.journey.bangkit.data.local.vacancy.VacancyEntity
 import com.journey.bangkit.data.api.JourneyApi
+import com.journey.bangkit.data.api.JourneyMLApi
 import com.journey.bangkit.data.api.LoggingInterceptor
 import com.journey.bangkit.data.remote.JourneyRemoteMediator
 import dagger.Module
@@ -49,6 +51,16 @@ object AppModule {
         return Retrofit.Builder()
             .baseUrl(JourneyApi.BASE_URL)
             .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create()
+    }
+
+    @Provides
+    @Singleton
+    fun provideJourneyMLApi(): JourneyMLApi {
+        return Retrofit.Builder()
+            .baseUrl(JourneyMLApi.BASE_URL_ML)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create()

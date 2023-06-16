@@ -7,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
 import com.google.accompanist.navigation.animation.composable
 import com.journey.bangkit.data.model.UserJobSeeker
+import com.journey.bangkit.data.source.JourneyDataSource
 import com.journey.bangkit.ui.screen.login.jobprovider.LoginJobProviderScreen
 import com.journey.bangkit.ui.screen.login.jobseeker.LoginJobSeekerScreen
 import com.journey.bangkit.ui.screen.register.jobprovider.RegisterJobProviderScreen
@@ -58,6 +59,7 @@ fun NavGraphBuilder.authGraph(navController: NavController, setNavigationItem: (
                     navController.navigate(Screen.RegisterJobSeeker.route)
                 },
                 navigateToHome = {
+                    setNavigationItem(JourneyDataSource.navItemsJobSeeker)
                     navController.navigate(Screen.HomeJobSeeker.route)
                 }
             )
@@ -81,6 +83,7 @@ fun NavGraphBuilder.authGraph(navController: NavController, setNavigationItem: (
                     navController.navigate(Screen.RegisterJobProvider.route)
                 },
                 navigateToHome = {
+                    setNavigationItem(JourneyDataSource.navItemsJobProvider)
                     navController.navigate(Screen.HomeJobProvider.route)
                 }
             )

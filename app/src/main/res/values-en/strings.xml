@@ -31,6 +31,7 @@
     <string name="placement_address_placeholder">What job position is required?</string>
     <string name="description_placeholder">Job description</string>
     <string name="deadline_time_placeholder">Deadline</string>
+    <string name="job_type_placeholder">Job type</string>
     <string name="vacancy">Vacancy</string>
     <string name="jobseeker">Job Seeker</string>
     <string name="jobprovider">Job Provider</string>

@@ -120,7 +120,9 @@ fun JobApplyContent(
                             skill_two = job.skill_two_name,
                             disability = job.disability_name,
                             appliedAt = job.applied_at.toDate(),
-                            status = job.status
+                            status = job.status,
+                            onClick = {},
+                            id = job.id
                         )
                     }
                 }

@@ -8,10 +8,6 @@ object VacancyDataSource {
     fun vacanciesDummy(): VacancyResponse {
         val data = VacancyResponse(
             status = "Success",
-            page = 1,
-            limit = 10,
-            totalVacancies = 1,
-            totalPages = 1,
             vacancies = mutableListOf()
         )
         val dataVacancy: MutableList<Vacancy> = mutableListOf()

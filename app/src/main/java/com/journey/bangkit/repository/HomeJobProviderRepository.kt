@@ -1,21 +1,22 @@
 package com.journey.bangkit.repository
 
+import com.journey.bangkit.data.api.JourneyApi
+import com.journey.bangkit.data.local.JourneyDatabase
 import com.journey.bangkit.data.model.VacancyResponse
-import com.journey.bangkit.data.source.VacancyDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
 
-class HomeJobProviderRepository {
-    fun getVacancyCompany(): Flow<List<VacancyResponse>> = flowOf(listOf(VacancyDataSource.vacanciesDummy()))
-
-    companion object {
-        @Volatile
-        private var instance: HomeJobProviderRepository? = null
-
-        fun getInstance(): HomeJobProviderRepository = instance ?: synchronized(this) {
-            HomeJobProviderRepository().apply {
-                instance = this
-            }
-        }
+class HomeJobProviderRepository @Inject constructor(
+    private val db: JourneyDatabase,
+    private val api: JourneyApi
+) {
+    suspend fun getAllVacancies(): Flow<VacancyResponse> {
+        val request = db.loginDao.getLogin()
+        val response = api.getCompanyVacancies(
+            token = request.token,
+            companyId = request.user_id
+        )
+        return flowOf(response)
     }
 }
